@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leads - Admin HomeScape</title>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../assets/js/tailwind-config.js"></script>
+    
+    <link rel="stylesheet" href="../assets/css/admin/style.css">
+</head>
+<body class="bg-[#f8fafc] text-gray-800 font-sans antialiased flex h-screen overflow-hidden selection:bg-primary-100 selection:text-primary-900">
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900/50 z-20 hidden lg:hidden backdrop-blur-sm transition-opacity"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-100/80 z-30 transform -translate-x-full lg:relative lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+        <!-- Logo -->
+        <div class="h-16 flex items-center px-6 border-b border-gray-100/80">
+            <a href="../index.html" class="flex items-center gap-2">
+                <i class="ph-fill ph-house-line text-2xl text-primary-600"></i>
+                <span class="font-bold text-xl tracking-tight text-gray-900">Home<span class="text-primary-600">Scape</span></span>
+            </a>
+            <button id="close-sidebar" class="ml-auto lg:hidden text-gray-400 hover:text-gray-600">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-3 mt-4">Overview</div>
+            <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors">
+                <i class="ph ph-squares-four text-xl"></i>
+                Dashboard
+            </a>
+            
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-3 mt-6">Management</div>
+            <a href="properties.html" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors">
+                <i class="ph ph-buildings text-xl"></i>
+                Properties
+            </a>
+            <a href="calendar.html" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors">
+                <i class="ph ph-calendar text-xl"></i>
+                Appointments
+            </a>
+            <a href="leads.html" class="flex items-center justify-between px-3 py-2.5 bg-primary-50 text-primary-700 rounded-lg font-medium transition-colors">
+                <div class="flex items-center gap-3">
+                    <i class="ph ph-users text-xl"></i>
+                    Leads
+                </div>
+                <span class="bg-red-100 text-red-600 py-0.5 px-2 rounded-full text-xs font-bold">12</span>
+            </a>
+            
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-3 mt-6">System</div>
+            <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors">
+                <i class="ph ph-gear text-xl"></i>
+                Settings
+            </a>
+            <a href="../index.html" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors mt-auto">
+                <i class="ph ph-arrow-left text-xl"></i>
+                Back to Site
+            </a>
+        </nav>
+
+        <!-- User bottom -->
+        <div class="p-4 border-t border-gray-100/80">
+            <div class="flex items-center gap-3">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=eff6ff&color=1d4ed8" alt="Admin" class="w-10 h-10 rounded-full">
+                <div>
+                    <div class="font-semibold text-sm text-gray-900">Admin User</div>
+                    <div class="text-xs text-gray-500">admin@homescape.com</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col h-screen overflow-hidden">
+        <!-- Top Navbar -->
+        <header class="h-16 bg-white border-b border-gray-100/80 flex items-center justify-between px-6 lg:px-8 z-10 shadow-[0_4px_24px_rgba(0,0,0,0.01)] shrink-0">
+            <div class="flex items-center gap-4">
+                <button id="open-sidebar" class="text-gray-500 hover:text-gray-700 lg:hidden">
+                    <i class="ph ph-list text-2xl"></i>
+                </button>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button class="relative text-gray-500 hover:text-gray-700 transition-colors p-2 rounded-full hover:bg-gray-50">
+                    <i class="ph ph-bell text-xl"></i>
+                    <span class="absolute top-1 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+            </div>
+        </header>
+        
+        <!-- Main Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto p-6 lg:p-8">
+            <div class="max-w-7xl mx-auto space-y-6">
+                
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Leads & Inquiries</h1>
+                        <p class="text-gray-500 text-sm mt-1">Manage contact requests, bookings, and prospect clients.</p>
+                    </div>
+                    <button class="bg-white border border-gray-200 text-gray-700 px-4 py-2.5 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center gap-2">
+                        <i class="ph ph-export text-lg"></i>
+                        Export CSV
+                    </button>
+                </div>
+
+                <!-- Metrics/Tabs -->
+                <div class="flex flex-wrap gap-4 mb-6">
+                    <div class="bg-white px-5 py-3 rounded-xl border border-primary-500 text-primary-700 font-medium shadow-[0_4px_14px_rgba(79,70,229,0.1)] cursor-pointer select-none relative overflow-hidden group">
+                        <div class="absolute inset-0 bg-primary-50 opacity-100"></div>
+                        <div class="relative flex items-center gap-2 z-10">
+                            <span class="w-2 h-2 rounded-full bg-primary-500"></span>
+                            All Leads
+                            <span class="bg-white text-primary-700 text-xs px-2 py-0.5 rounded-full ml-1">324</span>
+                        </div>
+                    </div>
+                    <div class="bg-white px-5 py-3 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 font-medium cursor-pointer transition-colors select-none">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-red-400"></span>
+                            New
+                            <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full ml-1">12</span>
+                        </div>
+                    </div>
+                    <div class="bg-white px-5 py-3 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 font-medium cursor-pointer transition-colors select-none">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                            In Progress
+                            <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded-full ml-1">45</span>
+                        </div>
+                    </div>
+                    <div class="bg-white px-5 py-3 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 font-medium cursor-pointer transition-colors select-none">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                            Closed
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leads Table -->
+                <div class="bg-white rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] overflow-hidden">
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-gray-50/50 border-b border-gray-100/80">
+                                    <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Contact Info</th>
+                                    <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Property/Subject</th>
+                                    <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Date</th>
+                                    <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th class="py-4 px-6 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-100/80">
+                                <!-- Row 1 -->
+                                <tr class="hover:bg-gray-50/50 transition-colors group">
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold">
+                                                SJ
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-gray-900 text-sm">Sarah Jenkins</div>
+                                                <div class="text-xs text-gray-500 mt-0.5 flex flex-col gap-0.5">
+                                                    <span>sarah.j@example.com</span>
+                                                    <span>+1 (555) 123-4567</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <div class="text-sm font-medium text-gray-900">Modern Luxury Villa with Pool</div>
+                                        <div class="text-xs text-gray-500 mt-0.5 max-w-xs truncate">"I'd like to schedule a viewing for this weekend..."</div>
+                                    </td>
+                                    <td class="py-4 px-6 text-sm text-gray-600">
+                                        Today, 10:30 AM
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-red-50 text-red-700 border border-red-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> New
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button class="px-3 py-1.5 bg-primary-50 text-primary-600 hover:bg-primary-100 hover:text-primary-700 text-xs font-medium rounded-lg transition-colors">
+                                                Reply
+                                            </button>
+                                            <div class="relative">
+                                                <button class="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg transition-colors">
+                                                    <i class="ph ph-dots-three-vertical text-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 2 -->
+                                <tr class="hover:bg-gray-50/50 transition-colors group">
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold">
+                                                MR
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-gray-900 text-sm">Michael Roberts</div>
+                                                <div class="text-xs text-gray-500 mt-0.5 flex flex-col gap-0.5">
+                                                    <span>m.roberts@company.com</span>
+                                                    <span>+1 (555) 987-6543</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <div class="text-sm font-medium text-gray-900">General Inquiry</div>
+                                        <div class="text-xs text-gray-500 mt-0.5 max-w-xs truncate">"Looking for commercial spaces in downtown..."</div>
+                                    </td>
+                                    <td class="py-4 px-6 text-sm text-gray-600">
+                                        Yesterday, 2:15 PM
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-amber-50 text-amber-700 border border-amber-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> In Progress
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button class="px-3 py-1.5 bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-xs font-medium rounded-lg transition-colors border border-gray-200">
+                                                View
+                                            </button>
+                                            <div class="relative">
+                                                <button class="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg transition-colors">
+                                                    <i class="ph ph-dots-three-vertical text-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <!-- Row 3 -->
+                                <tr class="hover:bg-gray-50/50 transition-colors group">
+                                    <td class="py-4 px-6">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-10 h-10 rounded-full bg-gray-100 text-gray-600 flex items-center justify-center font-bold">
+                                                ER
+                                            </div>
+                                            <div>
+                                                <div class="font-bold text-gray-900 text-sm">Elena Rodriguez</div>
+                                                <div class="text-xs text-gray-500 mt-0.5 flex flex-col gap-0.5">
+                                                    <span>elena.r@email.com</span>
+                                                    <span class="text-gray-400 italic">No phone provided</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <div class="text-sm font-medium text-gray-900">Skyview Penthouse Apartment</div>
+                                        <div class="text-xs text-gray-500 mt-0.5 max-w-xs truncate">"Is this property pet friendly?"</div>
+                                    </td>
+                                    <td class="py-4 px-6 text-sm text-gray-600">
+                                        May 02, 2026
+                                    </td>
+                                    <td class="py-4 px-6">
+                                        <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Closed
+                                        </span>
+                                    </td>
+                                    <td class="py-4 px-6 text-right">
+                                        <div class="flex items-center justify-end gap-2">
+                                            <button class="px-3 py-1.5 bg-gray-50 text-gray-600 hover:bg-gray-100 hover:text-gray-900 text-xs font-medium rounded-lg transition-colors border border-gray-200">
+                                                View
+                                            </button>
+                                            <div class="relative">
+                                                <button class="p-1.5 text-gray-400 hover:text-gray-600 rounded-lg transition-colors">
+                                                    <i class="ph ph-dots-three-vertical text-lg"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div class="p-4 border-t border-gray-100/80 flex items-center justify-between">
+                        <div class="text-sm text-gray-500">
+                            Showing <span class="font-medium text-gray-900">1</span> to <span class="font-medium text-gray-900">3</span> of <span class="font-medium text-gray-900">324</span> leads
+                        </div>
+                        <div class="flex gap-1">
+                            <button class="p-2 rounded-lg border border-gray-200 text-gray-400 cursor-not-allowed">
+                                <i class="ph ph-caret-left"></i>
+                            </button>
+                            <button class="w-9 h-9 rounded-lg bg-primary-600 text-white font-medium text-sm flex items-center justify-center">1</button>
+                            <button class="w-9 h-9 rounded-lg hover:bg-gray-100 text-gray-700 font-medium text-sm flex items-center justify-center transition-colors">2</button>
+                            <button class="w-9 h-9 rounded-lg hover:bg-gray-100 text-gray-700 font-medium text-sm flex items-center justify-center transition-colors">3</button>
+                            <button class="p-2 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+                                <i class="ph ph-caret-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/admin/main.js"></script>
+</body>
+</html>

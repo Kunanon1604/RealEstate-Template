@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments Calendar - Admin HomeScape</title>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../assets/js/tailwind-config.js"></script>
+    
+    <!-- FullCalendar -->
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+    
+    <link rel="stylesheet" href="../assets/css/admin/style.css">
+
+    <style>
+        /* Custom FullCalendar Styling */
+        .fc {
+            font-family: 'Inter', sans-serif;
+        }
+        .fc-theme-standard td, .fc-theme-standard th {
+            border-color: #f1f5f9; /* gray-100 */
+        }
+        .fc-theme-standard .fc-scrollgrid {
+            border-color: #f1f5f9;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .fc-header-toolbar {
+            margin-bottom: 1.5rem !important;
+        }
+        .fc-toolbar-title {
+            font-size: 1.25rem !important;
+            font-weight: 700 !important;
+            color: #111827; /* gray-900 */
+        }
+        .fc .fc-button-primary {
+            background-color: #ffffff;
+            color: #4b5563; /* gray-600 */
+            border: 1px solid #e5e7eb; /* gray-200 */
+            border-radius: 0.5rem;
+            font-weight: 500;
+            text-transform: capitalize;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            transition: all 0.2s;
+        }
+        .fc .fc-button-primary:not(:disabled):active,
+        .fc .fc-button-primary:not(:disabled).fc-button-active,
+        .fc .fc-button-primary:hover {
+            background-color: #f9fafb;
+            color: #111827;
+            border-color: #d1d5db;
+        }
+        .fc .fc-button-primary:disabled {
+            background-color: #f3f4f6;
+            border-color: #e5e7eb;
+            color: #9ca3af;
+        }
+        .fc .fc-today-button {
+            background-color: #4f46e5; /* primary-600 */
+            color: white;
+            border-color: #4f46e5;
+        }
+        .fc .fc-today-button:hover {
+            background-color: #4338ca; /* primary-700 */
+            color: white;
+        }
+        .fc .fc-today-button:disabled {
+            display: none; /* Hide today if already on today */
+        }
+        .fc-col-header-cell-cushion {
+            padding: 12px 8px !important;
+            color: #6b7280; /* gray-500 */
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+        }
+        .fc-daygrid-day-number {
+            color: #374151; /* gray-700 */
+            font-weight: 500;
+            padding: 8px !important;
+        }
+        .fc-day-today {
+            background-color: #f0fdf4 !important; /* primary-50 */
+        }
+        .fc-day-today .fc-daygrid-day-number {
+            color: #16a34a; /* primary-600 */
+            font-weight: 700;
+        }
+        .fc-event {
+            border: none !important;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .fc-event:hover {
+            transform: scale(1.02);
+            opacity: 0.9;
+        }
+        
+        /* Custom Event Colors based on extended props */
+        .event-viewing {
+            background-color: #dbeafe !important;
+            color: #1d4ed8 !important;
+            border-left: 3px solid #3b82f6 !important;
+        }
+        .event-meeting {
+            background-color: #fef3c7 !important;
+            color: #b45309 !important;
+            border-left: 3px solid #f59e0b !important;
+        }
+        .event-signing {
+            background-color: #dcfce7 !important;
+            color: #15803d !important;
+            border-left: 3px solid #22c55e !important;
+        }
+    </style>
+</head>
+<body class="bg-[#f8fafc] text-gray-800 font-sans antialiased flex h-screen overflow-hidden selection:bg-primary-100 selection:text-primary-900">
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900/50 z-20 hidden lg:hidden backdrop-blur-sm transition-opacity"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-100/80 z-30 transform -translate-x-full lg:relative lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+        <!-- Logo -->
+        <div class="h-16 flex items-center px-6 border-b border-gray-100/80">
+            <a href="../index.html" class="flex items-center gap-2">
+                <i class="ph-fill ph-house-line text-2xl text-primary-600"></i>
+                <span class="font-bold text-xl tracking-tight text-gray-900">Home<span class="text-primary-600">Scape</span></span>
+            </a>
+            <button id="close-sidebar" class="ml-auto lg:hidden text-gray-400 hover:text-gray-600">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-3 mt-4">Overview</div>
+            <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors">
+                <i class="ph ph-squares-four text-xl"></i>
+                Dashboard
+            </a>
+            
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-3 mt-6">Management</div>
+            <a href="properties.html" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors">
+                <i class="ph ph-buildings text-xl"></i>
+                Properties
+            </a>
+            <a href="calendar.html" class="flex items-center gap-3 px-3 py-2.5 bg-primary-50 text-primary-700 rounded-lg font-medium transition-colors">
+                <i class="ph ph-calendar text-xl"></i>
+                Appointments
+            </a>
+            <a href="leads.html" class="flex items-center justify-between px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors">
+                <div class="flex items-center gap-3">
+                    <i class="ph ph-users text-xl"></i>
+                    Leads
+                </div>
+                <span class="bg-red-100 text-red-600 py-0.5 px-2 rounded-full text-xs font-bold">12</span>
+            </a>
+            
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-3 mt-6">System</div>
+            <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors">
+                <i class="ph ph-gear text-xl"></i>
+                Settings
+            </a>
+            <a href="../index.html" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors mt-auto">
+                <i class="ph ph-arrow-left text-xl"></i>
+                Back to Site
+            </a>
+        </nav>
+
+        <!-- User bottom -->
+        <div class="p-4 border-t border-gray-100/80">
+            <div class="flex items-center gap-3">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=eff6ff&color=1d4ed8" alt="Admin" class="w-10 h-10 rounded-full">
+                <div>
+                    <div class="font-semibold text-sm text-gray-900">Admin User</div>
+                    <div class="text-xs text-gray-500">admin@homescape.com</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col h-screen overflow-hidden">
+        <!-- Top Navbar -->
+        <header class="h-16 bg-white border-b border-gray-100/80 flex items-center justify-between px-6 lg:px-8 z-10 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+            <div class="flex items-center gap-4">
+                <button id="open-sidebar" class="text-gray-500 hover:text-gray-700 lg:hidden">
+                    <i class="ph ph-list text-2xl"></i>
+                </button>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button id="btn-new-event" class="bg-primary-600 hover:bg-primary-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition shadow-sm flex items-center gap-2">
+                    <i class="ph ph-plus text-lg"></i>
+                    <span class="hidden sm:inline">New Event</span>
+                </button>
+                <button class="relative text-gray-500 hover:text-gray-700 transition-colors p-2 rounded-full hover:bg-gray-50">
+                    <i class="ph ph-bell text-xl"></i>
+                </button>
+            </div>
+        </header>
+        
+        <!-- Main Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto p-6 lg:p-8">
+            <div class="max-w-7xl mx-auto h-full flex flex-col space-y-6">
+                
+                <!-- Header -->
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Appointments Calendar</h1>
+                    <p class="text-gray-500 text-sm mt-1">Manage property viewings, client meetings, and lease signings. Drag and drop events to reschedule.</p>
+                </div>
+
+                <!-- Calendar Container -->
+                <div class="flex-1 bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] min-h-[600px] flex flex-col">
+                    <div id="calendar" class="flex-1"></div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Event Detail Modal (Hidden by default) -->
+    <div id="event-modal" class="fixed inset-0 bg-gray-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md transform scale-95 transition-transform duration-300" id="event-modal-content">
+            <!-- Header -->
+            <div class="p-6 border-b border-gray-100 flex justify-between items-start relative overflow-hidden">
+                <div id="modal-color-strip" class="absolute top-0 left-0 w-full h-1 bg-primary-500"></div>
+                <div>
+                    <div id="modal-type-badge" class="inline-block px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-2"></div>
+                    <h3 id="modal-title" class="text-xl font-bold text-gray-900"></h3>
+                </div>
+                <button id="close-modal" class="text-gray-400 hover:text-gray-600 transition-colors">
+                    <i class="ph ph-x text-xl"></i>
+                </button>
+            </div>
+            
+            <!-- Body -->
+            <div class="p-6 space-y-5">
+                <div class="flex items-start gap-3">
+                    <i class="ph-fill ph-clock text-gray-400 text-xl mt-0.5"></i>
+                    <div>
+                        <div class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5">Time</div>
+                        <div id="modal-time" class="text-sm text-gray-900 font-medium"></div>
+                    </div>
+                </div>
+                
+                <div class="flex items-start gap-3">
+                    <i class="ph-fill ph-map-pin text-gray-400 text-xl mt-0.5"></i>
+                    <div>
+                        <div class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5">Location</div>
+                        <div id="modal-location" class="text-sm text-gray-900 font-medium"></div>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                    <i class="ph-fill ph-user text-gray-400 text-xl mt-0.5"></i>
+                    <div>
+                        <div class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5">Client</div>
+                        <div id="modal-client" class="text-sm text-gray-900 font-medium"></div>
+                        <div id="modal-client-contact" class="text-xs text-primary-600 font-medium mt-1"></div>
+                    </div>
+                </div>
+
+                <div class="flex items-start gap-3">
+                    <i class="ph-fill ph-text-align-left text-gray-400 text-xl mt-0.5"></i>
+                    <div>
+                        <div class="text-xs text-gray-500 font-semibold uppercase tracking-wider mb-0.5">Notes</div>
+                        <p id="modal-desc" class="text-sm text-gray-600 leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Footer -->
+            <div class="p-4 bg-gray-50 border-t border-gray-100 rounded-b-2xl flex justify-end gap-3">
+                <button id="cancel-modal" class="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors">Close</button>
+                <button class="px-4 py-2 text-sm font-bold text-white bg-primary-600 hover:bg-primary-700 rounded-lg shadow-sm transition-colors flex items-center gap-2">
+                    <i class="ph ph-pencil-simple"></i> Edit Event
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- New Event Modal -->
+    <div id="new-event-modal" class="fixed inset-0 bg-gray-900/60 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm opacity-0 transition-opacity duration-300">
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg transform scale-95 transition-transform duration-300" id="new-event-modal-content">
+            <!-- Header -->
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">New Event</h3>
+                        <p class="text-xs text-gray-400 mt-0.5">Add a new appointment to the calendar</p>
+                    </div>
+                    <button id="close-new-modal" class="text-gray-400 hover:text-gray-600 transition-colors p-1 rounded-lg hover:bg-gray-100">
+                        <i class="ph ph-x text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Body -->
+            <form id="new-event-form" class="p-6 space-y-4 max-h-[65vh] overflow-y-auto">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Event Title <span class="text-red-400">*</span></label>
+                    <input type="text" id="ne-title" required placeholder="e.g. Villa Viewing" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-200 focus:border-primary-400 outline-none transition-all">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Type <span class="text-red-400">*</span></label>
+                        <select id="ne-type" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-200 focus:border-primary-400 outline-none transition-all cursor-pointer">
+                            <option value="Viewing">🏠 Viewing</option>
+                            <option value="Meeting">🤝 Meeting</option>
+                            <option value="Signing">✍️ Signing</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Date <span class="text-red-400">*</span></label>
+                        <input type="date" id="ne-date" required class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-200 focus:border-primary-400 outline-none transition-all">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Start Time</label>
+                        <input type="time" id="ne-start" value="10:00" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-200 focus:border-primary-400 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">End Time</label>
+                        <input type="time" id="ne-end" value="11:00" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-200 focus:border-primary-400 outline-none transition-all">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Location</label>
+                    <div class="relative">
+                        <i class="ph ph-map-pin absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="ne-location" placeholder="e.g. 123 Main St or Office" class="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-200 focus:border-primary-400 outline-none transition-all">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Client Name</label>
+                        <input type="text" id="ne-client" placeholder="e.g. John Doe" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-200 focus:border-primary-400 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Contact</label>
+                        <input type="text" id="ne-contact" placeholder="Phone or Email" class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-200 focus:border-primary-400 outline-none transition-all">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">Notes</label>
+                    <textarea id="ne-notes" rows="3" placeholder="Any additional details..." class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:ring-2 focus:ring-primary-200 focus:border-primary-400 outline-none transition-all resize-none"></textarea>
+                </div>
+            </form>
+            <!-- Footer -->
+            <div class="p-4 bg-gray-50 border-t border-gray-100 rounded-b-2xl flex justify-end gap-3">
+                <button id="cancel-new-modal" type="button" class="px-4 py-2 text-sm font-semibold text-gray-600 hover:text-gray-900 transition-colors">Cancel</button>
+                <button id="submit-new-event" type="button" class="px-5 py-2.5 text-sm font-bold text-white bg-primary-600 hover:bg-primary-700 rounded-xl shadow-sm transition-all hover:shadow-md flex items-center gap-2">
+                    <i class="ph ph-plus-circle text-lg"></i> Add Event
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/admin/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var calendarEl = document.getElementById('calendar');
+            
+            // Helper for formatting time
+            const formatTime = (date) => {
+                return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            };
+
+            // Today's date logic to generate dynamic dummy events
+            const today = new Date();
+            const y = today.getFullYear();
+            const m = today.getMonth();
+            const d = today.getDate();
+
+            var calendar = new FullCalendar.Calendar(calendarEl, {
+                height: '100%',
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                editable: true, // Allow drag and drop
+                droppable: true,
+                dayMaxEvents: true, // allow "more" link when too many events
+                events: [
+                    {
+                        title: 'Villa Viewing',
+                        start: new Date(y, m, d + 1, 10, 0),
+                        end: new Date(y, m, d + 1, 11, 30),
+                        classNames: ['event-viewing'],
+                        extendedProps: {
+                            type: 'Viewing',
+                            location: 'Modern Luxury Villa (#PROP-001)',
+                            client: 'John Doe',
+                            contact: '+1 555-0198',
+                            desc: 'Client is highly interested. Bring the pool maintenance records.'
+                        }
+                    },
+                    {
+                        title: 'Client Meeting - Sarah',
+                        start: new Date(y, m, d - 2, 14, 0),
+                        end: new Date(y, m, d - 2, 15, 0),
+                        classNames: ['event-meeting'],
+                        extendedProps: {
+                            type: 'Meeting',
+                            location: 'HQ Office - Conference Room B',
+                            client: 'Sarah Jenkins',
+                            contact: 'sarah.j@example.com',
+                            desc: 'Discussing the commercial property portfolio.'
+                        }
+                    },
+                    {
+                        title: 'Lease Signing',
+                        start: new Date(y, m, d, 15, 0),
+                        classNames: ['event-signing'],
+                        extendedProps: {
+                            type: 'Signing',
+                            location: 'HQ Office',
+                            client: 'Mike Smith',
+                            contact: '+1 555-0922',
+                            desc: 'Final signing for the Skyview Penthouse.'
+                        }
+                    },
+                    {
+                        title: 'Condo Tour',
+                        start: new Date(y, m, d + 4, 13, 0),
+                        classNames: ['event-viewing'],
+                        extendedProps: {
+                            type: 'Viewing',
+                            location: 'Downtown Condo Building (#PROP-042)',
+                            client: 'Alice Cooper',
+                            contact: 'alice@example.com',
+                            desc: 'First time buyer. Show amenities as well.'
+                        }
+                    }
+                ],
+                eventClick: function(info) {
+                    // Prevent default URL navigation if present
+                    info.jsEvent.preventDefault();
+                    
+                    const event = info.event;
+                    const props = event.extendedProps;
+                    
+                    // Populate Modal Data
+                    document.getElementById('modal-title').textContent = event.title;
+                    
+                    // Format Date/Time
+                    let timeStr = event.start.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' });
+                    if (!event.allDay) {
+                        timeStr += ` • ${formatTime(event.start)}`;
+                        if (event.end) {
+                            timeStr += ` - ${formatTime(event.end)}`;
+                        }
+                    }
+                    document.getElementById('modal-time').textContent = timeStr;
+                    
+                    document.getElementById('modal-location').textContent = props.location || 'N/A';
+                    document.getElementById('modal-client').textContent = props.client || 'N/A';
+                    document.getElementById('modal-client-contact').textContent = props.contact || '';
+                    document.getElementById('modal-desc').textContent = props.desc || 'No additional notes.';
+                    
+                    // Badge Styling
+                    const badge = document.getElementById('modal-type-badge');
+                    const strip = document.getElementById('modal-color-strip');
+                    badge.textContent = props.type;
+                    
+                    if (props.type === 'Viewing') {
+                        badge.className = 'inline-block px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-2 bg-blue-100 text-blue-700';
+                        strip.className = 'absolute top-0 left-0 w-full h-1 bg-blue-500';
+                    } else if (props.type === 'Meeting') {
+                        badge.className = 'inline-block px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-2 bg-amber-100 text-amber-700';
+                        strip.className = 'absolute top-0 left-0 w-full h-1 bg-amber-500';
+                    } else if (props.type === 'Signing') {
+                        badge.className = 'inline-block px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-2 bg-emerald-100 text-emerald-700';
+                        strip.className = 'absolute top-0 left-0 w-full h-1 bg-emerald-500';
+                    }
+                    
+                    // Show Modal
+                    const modal = document.getElementById('event-modal');
+                    const content = document.getElementById('event-modal-content');
+                    modal.classList.remove('hidden');
+                    
+                    // Trigger animation
+                    requestAnimationFrame(() => {
+                        modal.classList.remove('opacity-0');
+                        content.classList.remove('scale-95');
+                    });
+                }
+            });
+            calendar.render();
+            
+            // ── Generic modal open/close helpers ──
+            function openModal(modalId, contentId) {
+                const modal = document.getElementById(modalId);
+                const content = document.getElementById(contentId);
+                modal.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    modal.classList.remove('opacity-0');
+                    content.classList.remove('scale-95');
+                });
+            }
+            function closeModalEl(modalId, contentId) {
+                const modal = document.getElementById(modalId);
+                const content = document.getElementById(contentId);
+                modal.classList.add('opacity-0');
+                content.classList.add('scale-95');
+                setTimeout(() => modal.classList.add('hidden'), 300);
+            }
+
+            // ── Event Detail Modal close ──
+            const closeDetail = () => closeModalEl('event-modal', 'event-modal-content');
+            document.getElementById('close-modal').addEventListener('click', closeDetail);
+            document.getElementById('cancel-modal').addEventListener('click', closeDetail);
+            document.getElementById('event-modal').addEventListener('click', function(e) {
+                if (e.target === this) closeDetail();
+            });
+
+            // ── New Event Modal ──
+            const closeNew = () => closeModalEl('new-event-modal', 'new-event-modal-content');
+
+            document.getElementById('btn-new-event').addEventListener('click', () => {
+                // Default date to today
+                document.getElementById('ne-date').value = new Date().toISOString().split('T')[0];
+                openModal('new-event-modal', 'new-event-modal-content');
+            });
+
+            document.getElementById('close-new-modal').addEventListener('click', closeNew);
+            document.getElementById('cancel-new-modal').addEventListener('click', closeNew);
+            document.getElementById('new-event-modal').addEventListener('click', function(e) {
+                if (e.target === this) closeNew();
+            });
+
+            // ── Submit New Event ──
+            document.getElementById('submit-new-event').addEventListener('click', () => {
+                const form = document.getElementById('new-event-form');
+                if (!form.checkValidity()) { form.reportValidity(); return; }
+
+                const title = document.getElementById('ne-title').value.trim();
+                const type  = document.getElementById('ne-type').value;
+                const date  = document.getElementById('ne-date').value;
+                const start = document.getElementById('ne-start').value || '00:00';
+                const end   = document.getElementById('ne-end').value || '';
+
+                const classMap = { Viewing: 'event-viewing', Meeting: 'event-meeting', Signing: 'event-signing' };
+
+                const eventObj = {
+                    title: title,
+                    start: date + 'T' + start,
+                    classNames: [classMap[type] || 'event-viewing'],
+                    extendedProps: {
+                        type: type,
+                        location: document.getElementById('ne-location').value.trim() || 'N/A',
+                        client: document.getElementById('ne-client').value.trim() || 'N/A',
+                        contact: document.getElementById('ne-contact').value.trim() || '',
+                        desc: document.getElementById('ne-notes').value.trim() || 'No additional notes.'
+                    }
+                };
+                if (end) eventObj.end = date + 'T' + end;
+
+                calendar.addEvent(eventObj);
+                form.reset();
+                closeNew();
+            });
+        });
+    </script>
+</body>
+</html>

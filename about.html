@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - HomeScape</title>
+    <meta name="description" content="Learn more about HomeScape, our mission, vision, and the expert team behind our premium real estate services.">
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+    <script>
+      if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+      } else {
+          document.documentElement.classList.remove('dark');
+      }
+    </script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-dark-bg dark:text-gray-100 font-sans transition-colors duration-300 flex flex-col min-h-screen">
+
+        <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/80 dark:bg-dark-bg/80 backdrop-blur-md border-b border-gray-200 dark:border-dark-border shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-4">
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-600 dark:text-gray-300 hover:text-primary-600 focus:outline-none transition">
+                        <i class="ph ph-list text-3xl"></i>
+                    </button>
+                    <a href="index.html" class="flex-shrink-0 flex items-center gap-2">
+                        <i class="ph-fill ph-house-line text-3xl text-primary-600"></i>
+                        <span class="font-bold text-2xl tracking-tight text-gray-900 dark:text-white">Home<span class="text-primary-600">Scape</span></span>
+                    </a>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.html" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 font-medium transition">Home</a>
+                    <a href="listing.html" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 font-medium transition">Properties</a>
+                    <a href="about.html" class="text-primary-600 dark:text-primary-400 font-medium transition">About</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 font-medium transition">Contact</a>
+                    
+                    <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2 transition-colors">
+                        <i id="theme-toggle-dark-icon" class="ph ph-moon text-xl hidden"></i>
+                        <i id="theme-toggle-light-icon" class="ph ph-sun text-xl hidden"></i>
+                    </button>
+                    
+                    <!-- Localization Settings -->
+                    <div class="flex items-center gap-2 border-l border-gray-200 dark:border-gray-700 pl-4">
+                        <select id="lang-select" class="hidden bg-transparent text-sm text-gray-600 dark:text-gray-300 font-bold focus:outline-none cursor-pointer">
+                            <option value="en" class="text-gray-900">EN</option>
+                            <option value="th" class="text-gray-900">TH</option>
+                        </select>
+                        <select id="curr-select" class="bg-transparent text-sm text-gray-600 dark:text-gray-300 font-bold focus:outline-none cursor-pointer">
+                            <option value="thb" class="text-gray-900">THB</option>
+                            <option value="usd" class="text-gray-900">USD</option>
+                        </select>
+                    </div>
+                    
+                    <a href="contact.html" class="bg-primary-600 hover:bg-primary-700 text-white px-5 py-2.5 rounded-full font-medium transition shadow-lg shadow-primary-500/30">Add Listing</a>
+                </div>
+                <!-- Mobile toggles -->
+                <div class="md:hidden flex items-center gap-4">
+                    <button id="theme-toggle-mobile" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2 transition-colors">
+                        <i class="ph ph-moon text-xl block dark:hidden"></i>
+                        <i class="ph ph-sun text-xl hidden dark:block"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+        
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-gray-900/50 dark:bg-gray-900/80 z-[60] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm"></div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="fixed top-0 left-0 w-72 h-full bg-white dark:bg-dark-card z-[70] transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col md:hidden">
+        <div class="p-4 flex items-center justify-between border-b border-gray-100 dark:border-dark-border h-20">
+            <div class="flex items-center gap-2">
+                <i class="ph-fill ph-house-line text-2xl text-primary-600"></i>
+                <span class="font-bold text-xl tracking-tight text-gray-900 dark:text-white">Home<span class="text-primary-600">Scape</span></span>
+            </div>
+            <button id="mobile-close-btn" class="text-gray-500 hover:text-red-500 transition focus:outline-none p-2">
+                <i class="ph ph-x text-2xl"></i>
+            </button>
+        </div>
+        <div class="px-4 py-6 space-y-2 overflow-y-auto flex-grow">
+            <a href="index.html" class="block px-3 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition" data-i18n="nav_home">Home</a>
+            <a href="listing.html" class="block px-3 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition" data-i18n="nav_properties">Properties</a>
+            <a href="about.html" class="block px-3 py-3 text-base font-medium text-primary-600 bg-primary-50 dark:bg-primary-900/20 rounded-md transition" data-i18n="nav_about">About Us</a>
+            <a href="contact.html" class="block px-3 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition" data-i18n="nav_contact">Contact</a>
+        </div>
+        <div class="p-4 border-t border-gray-100 dark:border-dark-border">
+            <a href="contact.html" class="block text-center bg-primary-600 hover:bg-primary-700 text-white px-5 py-3 rounded-md font-medium transition w-full shadow-lg shadow-primary-500/30" data-i18n="nav_add_listing">Add Listing</a>
+        </div>
+    </div>
+
+    <!-- Page Header (Hero) -->
+    <header class="pt-32 pb-20 bg-primary-900 dark:bg-[#0a1120] relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" alt="Office" class="w-full h-full object-cover opacity-20">
+            <div class="absolute inset-0 bg-gradient-to-b from-primary-900/80 to-primary-900 dark:from-dark-bg/90 dark:to-dark-bg"></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold text-white mb-4 animate-slide-up">About HomeScape</h1>
+            <p class="text-xl text-primary-100 max-w-2xl mx-auto animate-fade-in" style="animation-delay: 0.2s;">Redefining the real estate experience through transparency, expertise, and a commitment to excellence.</p>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        
+        <!-- Company Introduction -->
+        <section class="py-20 bg-white dark:bg-dark-bg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col lg:flex-row gap-16 items-center" data-aos="fade-up">
+                    <div class="lg:w-1/2">
+                        <div class="grid grid-cols-2 gap-4">
+                            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Agent" class="rounded-2xl h-64 object-cover w-full shadow-premium">
+                            <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="House" class="rounded-2xl h-64 object-cover w-full shadow-premium mt-8">
+                        </div>
+                    </div>
+                    <div class="lg:w-1/2">
+                        <span class="text-primary-600 font-bold tracking-wider uppercase text-sm mb-2 block">Our Story</span>
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-6">Building Dreams Since 2010</h2>
+                        <p class="text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
+                            Founded on the principles of trust and integrity, HomeScape has grown from a small local agency to a premier real estate platform. We recognized the need for a more transparent and client-focused approach to buying and selling properties.
+                        </p>
+                        <p class="text-gray-600 dark:text-gray-400 mb-8 leading-relaxed">
+                            Today, we are proud to offer a curated selection of the finest properties, backed by a team of dedicated professionals who are passionate about helping you find your perfect place in the world.
+                        </p>
+                        
+                        <div class="grid grid-cols-3 gap-6 text-center border-t border-gray-100 dark:border-dark-border pt-8">
+                            <div>
+                                <div class="text-3xl font-bold text-primary-600 mb-1">15+</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 font-medium">Years Exp.</div>
+                            </div>
+                            <div>
+                                <div class="text-3xl font-bold text-primary-600 mb-1">2.5k</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 font-medium">Properties</div>
+                            </div>
+                            <div>
+                                <div class="text-3xl font-bold text-primary-600 mb-1">5k+</div>
+                                <div class="text-sm text-gray-500 dark:text-gray-400 font-medium">Happy Clients</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission & Vision -->
+        <section class="py-20 bg-gray-50 dark:bg-[#0a1120]">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8" data-aos="fade-up">
+                    <!-- Mission -->
+                    <div class="bg-white dark:bg-dark-card p-10 rounded-3xl shadow-sm border border-gray-100 dark:border-dark-border group hover:shadow-premium transition duration-300">
+                        <div class="h-16 w-16 bg-primary-50 dark:bg-primary-900/30 text-primary-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition duration-300">
+                            <i class="ph ph-target"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Our Mission</h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                            To empower our clients with the knowledge and resources necessary to make informed real estate decisions. We strive to simplify the property journey by providing unparalleled service, complete transparency, and expert guidance every step of the way.
+                        </p>
+                    </div>
+                    <!-- Vision -->
+                    <div class="bg-white dark:bg-dark-card p-10 rounded-3xl shadow-sm border border-gray-100 dark:border-dark-border group hover:shadow-premium transition duration-300">
+                        <div class="h-16 w-16 bg-blue-50 dark:bg-blue-900/30 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition duration-300">
+                            <i class="ph ph-eye"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Our Vision</h3>
+                        <p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+                            To be the most trusted and innovative real estate partner globally. We envision a future where finding a dream home is a seamless, joyous, and highly personalized experience, driven by technology and human connection.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Team Section -->
+        <section class="py-20 bg-white dark:bg-dark-bg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16" data-aos="fade-up">
+                    <span class="text-primary-600 font-bold tracking-wider uppercase text-sm mb-2 block">Our Experts</span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Meet The Team</h2>
+                    <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Dedicated professionals committed to delivering exceptional results for you.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8" data-aos="fade-up">
+                    <!-- Team Member 1 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden rounded-2xl mb-4">
+                            <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Team Member" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end justify-center pb-6 gap-4">
+                                <a href="#" class="h-10 w-10 bg-white text-gray-900 rounded-full flex items-center justify-center hover:bg-primary-600 hover:text-white transition"><i class="ph-fill ph-linkedin-logo text-xl"></i></a>
+                                <a href="#" class="h-10 w-10 bg-white text-gray-900 rounded-full flex items-center justify-center hover:bg-primary-600 hover:text-white transition"><i class="ph-fill ph-twitter-logo text-xl"></i></a>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white">Robert Fox</h4>
+                            <p class="text-primary-600 text-sm font-medium">Founder & CEO</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Team Member 2 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden rounded-2xl mb-4">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Team Member" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end justify-center pb-6 gap-4">
+                                <a href="#" class="h-10 w-10 bg-white text-gray-900 rounded-full flex items-center justify-center hover:bg-primary-600 hover:text-white transition"><i class="ph-fill ph-linkedin-logo text-xl"></i></a>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white">Eleanor Pena</h4>
+                            <p class="text-primary-600 text-sm font-medium">Head of Sales</p>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 3 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden rounded-2xl mb-4">
+                            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Team Member" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end justify-center pb-6 gap-4">
+                                <a href="#" class="h-10 w-10 bg-white text-gray-900 rounded-full flex items-center justify-center hover:bg-primary-600 hover:text-white transition"><i class="ph-fill ph-linkedin-logo text-xl"></i></a>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white">Albert Flores</h4>
+                            <p class="text-primary-600 text-sm font-medium">Senior Architect</p>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 4 -->
+                    <div class="group">
+                        <div class="relative overflow-hidden rounded-2xl mb-4">
+                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&q=80" alt="Team Member" class="w-full h-80 object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end justify-center pb-6 gap-4">
+                                <a href="#" class="h-10 w-10 bg-white text-gray-900 rounded-full flex items-center justify-center hover:bg-primary-600 hover:text-white transition"><i class="ph-fill ph-linkedin-logo text-xl"></i></a>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <h4 class="text-xl font-bold text-gray-900 dark:text-white">Jane Cooper</h4>
+                            <p class="text-primary-600 text-sm font-medium">Marketing Director</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 dark:bg-dark-bg border-t border-gray-800 dark:border-dark-border pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2 lg:col-span-1">
+                    <div class="flex items-center gap-2 mb-6">
+                        <i class="ph-fill ph-house-line text-3xl text-primary-500"></i>
+                        <span class="font-bold text-2xl tracking-tight text-white">Home<span class="text-primary-500">Scape</span></span>
+                    </div>
+                    <p class="text-gray-400 mb-6 text-sm leading-relaxed" data-i18n="footer_desc">Providing premium real estate services with a focus on client satisfaction, transparency, and top-tier properties.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="h-10 w-10 bg-gray-800 dark:bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition text-white"><i class="ph-fill ph-facebook-logo text-xl"></i></a>
+                        <a href="#" class="h-10 w-10 bg-gray-800 dark:bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition text-white"><i class="ph-fill ph-twitter-logo text-xl"></i></a>
+                        <a href="#" class="h-10 w-10 bg-gray-800 dark:bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition text-white"><i class="ph-fill ph-instagram-logo text-xl"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6" data-i18n="footer_links">Quick Links</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="index.html" class="hover:text-primary-500 transition">Home</a></li>
+                        <li><a href="listing.html" class="hover:text-primary-500 transition">Properties</a></li>
+                        <li><a href="about.html" class="hover:text-primary-500 transition">About Us</a></li>
+                        <li><a href="contact.html" class="hover:text-primary-500 transition">Contact</a></li>
+                        <li><a href="admin/login.html" class="hover:text-primary-500 transition flex items-center gap-1 text-primary-400 mt-2" data-i18n="nav_admin"><i class="ph-fill ph-lock-key"></i> Admin Demo</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6" data-i18n="footer_types">Property Types</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="hover:text-primary-500 transition">Luxury Villas</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Modern Apartments</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Commercial Spaces</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Suburban Houses</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Off-Plan Properties</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6" data-i18n="footer_contact">Contact Info</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i class="ph-fill ph-map-pin text-primary-500 text-lg mt-0.5"></i>
+                            <span>123 Premium Avenue,<br>Beverly Hills, CA 90210</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-phone text-primary-500 text-lg"></i>
+                            <span>+1 (555) 123-4567</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-envelope-simple text-primary-500 text-lg"></i>
+                            <span>hello@homescape.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 dark:border-dark-border pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2026 HomeScape Real Estate. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</body>
+</html>

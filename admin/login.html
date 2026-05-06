@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - HomeScape</title>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../assets/js/tailwind-config.js"></script>
+    
+    <link rel="stylesheet" href="../assets/css/admin/style.css">
+</head>
+<body class="bg-[#f8fafc] text-gray-800 font-sans antialiased min-h-screen flex selection:bg-primary-100 selection:text-primary-900">
+
+    <!-- Left Side: Login Form -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center p-8 sm:p-12 md:p-24 relative z-10 bg-white shadow-[20px_0_40px_rgba(0,0,0,0.02)]">
+        
+        <!-- Back to Site Link -->
+        <a href="../index.html" class="absolute top-8 left-8 flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-primary-600 transition-colors">
+            <i class="ph ph-arrow-left text-lg"></i>
+            Back to Website
+        </a>
+
+        <div class="w-full max-w-md">
+            <!-- Logo -->
+            <div class="flex items-center gap-2 mb-10">
+                <div class="w-10 h-10 bg-primary-50 rounded-xl flex items-center justify-center">
+                    <i class="ph-fill ph-house-line text-2xl text-primary-600"></i>
+                </div>
+                <span class="font-bold text-2xl tracking-tight text-gray-900">Home<span class="text-primary-600">Scape</span></span>
+                <span class="ml-2 px-2 py-0.5 rounded text-[10px] font-bold tracking-wider text-white bg-gray-900 uppercase">Admin</span>
+            </div>
+
+            <!-- Header -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2 tracking-tight">Welcome back</h1>
+                <p class="text-gray-500">Please enter your details to access the dashboard.</p>
+            </div>
+
+            <!-- Form -->
+            <form id="admin-login-form" class="space-y-6" onsubmit="event.preventDefault(); window.location.href='index.html';">
+                
+                <!-- Email -->
+                <div>
+                    <label for="email" class="block text-sm font-semibold text-gray-700 mb-1.5">Email</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="ph ph-envelope-simple text-gray-400 text-lg"></i>
+                        </div>
+                        <input type="email" id="email" class="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors bg-gray-50/50 hover:bg-gray-50 focus:bg-white text-gray-900 text-sm outline-none" placeholder="admin@homescape.com" value="admin@homescape.com" required>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="block text-sm font-semibold text-gray-700 mb-1.5">Password</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="ph ph-lock-key text-gray-400 text-lg"></i>
+                        </div>
+                        <input type="password" id="password" class="block w-full pl-10 pr-10 py-2.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-colors bg-gray-50/50 hover:bg-gray-50 focus:bg-white text-gray-900 text-sm outline-none" placeholder="••••••••" value="password123" required>
+                        <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors focus:outline-none">
+                            <i class="ph ph-eye text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Remember & Forgot -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <input id="remember-me" type="checkbox" class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded cursor-pointer" checked>
+                        <label for="remember-me" class="ml-2 block text-sm text-gray-600 cursor-pointer">
+                            Remember for 30 days
+                        </label>
+                    </div>
+                    <div class="text-sm">
+                        <a href="#" class="font-semibold text-primary-600 hover:text-primary-500 transition-colors">
+                            Forgot password?
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button type="submit" class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-bold text-white bg-gray-900 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 transition-all duration-200 transform hover:-translate-y-0.5">
+                        Sign In
+                    </button>
+                </div>
+            </form>
+
+            <div class="mt-8 pt-6 border-t border-gray-100 text-center">
+                <p class="text-sm text-gray-500">
+                    Don't have an account? <a href="#" class="font-semibold text-primary-600 hover:text-primary-500 transition-colors">Contact System Administrator</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side: Cover Image -->
+    <div class="hidden lg:block lg:w-1/2 relative">
+        <div class="absolute inset-0 bg-gray-900/40 mix-blend-multiply z-10"></div>
+        <img class="absolute inset-0 h-full w-full object-cover" src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Luxury Real Estate">
+        
+        <!-- Overlay Content -->
+        <div class="absolute bottom-0 left-0 right-0 z-20 p-12 text-white">
+            <div class="backdrop-blur-md bg-white/10 border border-white/20 p-8 rounded-2xl max-w-lg">
+                <div class="flex gap-1 mb-4 text-yellow-400">
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                    <i class="ph-fill ph-star"></i>
+                </div>
+                <p class="text-xl font-medium leading-relaxed mb-6">
+                    "HomeScape's admin panel has completely transformed how we manage our property listings and client inquiries. The interface is intuitive and incredibly fast."
+                </p>
+                <div class="flex items-center gap-4">
+                    <img src="https://ui-avatars.com/api/?name=Sarah+Jenkins&background=random" alt="Sarah Jenkins" class="w-12 h-12 rounded-full border-2 border-white/50">
+                    <div>
+                        <div class="font-bold">Sarah Jenkins</div>
+                        <div class="text-white/70 text-sm">Real Estate Director</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple password toggle visibility
+        document.getElementById('toggle-password').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password');
+            const icon = this.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                icon.classList.remove('ph-eye');
+                icon.classList.add('ph-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                icon.classList.remove('ph-eye-slash');
+                icon.classList.add('ph-eye');
+            }
+        });
+    </script>
+</body>
+</html>

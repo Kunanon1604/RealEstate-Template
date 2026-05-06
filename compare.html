@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Properties - HomeScape</title>
+    <!-- Tailwind CSS (via CDN for template purposes) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        },
+                        dark: {
+                            bg: '#0f172a',
+                            card: '#1e293b',
+                            border: '#334155'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-800 dark:bg-[#0a1120] dark:text-gray-200 transition-colors duration-300 min-h-screen flex flex-col">
+
+        <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/80 dark:bg-dark-bg/80 backdrop-blur-md border-b border-gray-200 dark:border-dark-border shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-4">
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-600 dark:text-gray-300 hover:text-primary-600 focus:outline-none transition">
+                        <i class="ph ph-list text-3xl"></i>
+                    </button>
+                    <a href="index.html" class="flex-shrink-0 flex items-center gap-2">
+                        <i class="ph-fill ph-house-line text-3xl text-primary-600"></i>
+                        <span class="font-bold text-2xl tracking-tight text-gray-900 dark:text-white">Home<span class="text-primary-600">Scape</span></span>
+                    </a>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.html" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 font-medium transition">Home</a>
+                    <a href="listing.html" class="text-primary-600 dark:text-primary-400 font-medium transition">Properties</a>
+                    <a href="about.html" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 font-medium transition">About</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 font-medium transition">Contact</a>
+                    
+                    <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2 transition-colors">
+                        <i id="theme-toggle-dark-icon" class="ph ph-moon text-xl hidden"></i>
+                        <i id="theme-toggle-light-icon" class="ph ph-sun text-xl hidden"></i>
+                    </button>
+                    
+                    <!-- Localization Settings -->
+                    <div class="flex items-center gap-2 border-l border-gray-200 dark:border-gray-700 pl-4">
+                        <select id="lang-select" class="hidden bg-transparent text-sm text-gray-600 dark:text-gray-300 font-bold focus:outline-none cursor-pointer">
+                            <option value="en" class="text-gray-900">EN</option>
+                            <option value="th" class="text-gray-900">TH</option>
+                        </select>
+                        <select id="curr-select" class="bg-transparent text-sm text-gray-600 dark:text-gray-300 font-bold focus:outline-none cursor-pointer">
+                            <option value="thb" class="text-gray-900">THB</option>
+                            <option value="usd" class="text-gray-900">USD</option>
+                        </select>
+                    </div>
+                    
+                    <a href="contact.html" class="bg-primary-600 hover:bg-primary-700 text-white px-5 py-2.5 rounded-full font-medium transition shadow-lg shadow-primary-500/30">Add Listing</a>
+                </div>
+                <!-- Mobile toggles -->
+                <div class="md:hidden flex items-center gap-4">
+                    <button id="theme-toggle-mobile" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2 transition-colors">
+                        <i class="ph ph-moon text-xl block dark:hidden"></i>
+                        <i class="ph ph-sun text-xl hidden dark:block"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+        
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-gray-900/50 dark:bg-gray-900/80 z-[60] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm"></div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="fixed top-0 left-0 w-72 h-full bg-white dark:bg-dark-card z-[70] transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col md:hidden">
+        <div class="p-4 flex items-center justify-between border-b border-gray-100 dark:border-dark-border h-20">
+            <div class="flex items-center gap-2">
+                <i class="ph-fill ph-house-line text-2xl text-primary-600"></i>
+                <span class="font-bold text-xl tracking-tight text-gray-900 dark:text-white">Home<span class="text-primary-600">Scape</span></span>
+            </div>
+            <button id="mobile-close-btn" class="text-gray-500 hover:text-red-500 transition focus:outline-none p-2">
+                <i class="ph ph-x text-2xl"></i>
+            </button>
+        </div>
+        <div class="px-4 py-6 space-y-2 overflow-y-auto flex-grow">
+            <a href="index.html" class="block px-3 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition" data-i18n="nav_home">Home</a>
+            <a href="listing.html" class="block px-3 py-3 text-base font-medium text-primary-600 bg-primary-50 dark:bg-primary-900/20 rounded-md transition" data-i18n="nav_properties">Properties</a>
+            <a href="about.html" class="block px-3 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition" data-i18n="nav_about">About Us</a>
+            <a href="contact.html" class="block px-3 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition" data-i18n="nav_contact">Contact</a>
+        </div>
+        <div class="p-4 border-t border-gray-100 dark:border-dark-border">
+            <a href="contact.html" class="block text-center bg-primary-600 hover:bg-primary-700 text-white px-5 py-3 rounded-md font-medium transition w-full shadow-lg shadow-primary-500/30" data-i18n="nav_add_listing">Add Listing</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-grow pt-32 pb-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="mb-10 text-center">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">Compare Properties</h1>
+                <p class="text-gray-600 dark:text-gray-400">Evaluate and compare your selected properties side by side to make the best decision.</p>
+            </div>
+
+            <!-- Comparison Table Container -->
+            <div id="compare-container" class="bg-white dark:bg-dark-card rounded-2xl shadow-sm border border-gray-100 dark:border-dark-border overflow-x-auto">
+                <!-- Injected via JS -->
+                <div class="p-10 text-center text-gray-500">Loading comparison...</div>
+            </div>
+            
+            <div class="mt-8 text-center">
+                <button onclick="window.history.back()" class="bg-gray-200 dark:bg-dark-border hover:bg-gray-300 dark:hover:bg-gray-700 text-gray-800 dark:text-white px-6 py-3 rounded-lg font-medium transition">Go Back</button>
+                <button id="clear-compare-btn" class="ml-4 text-red-500 hover:text-red-600 font-medium underline transition">Clear All</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 dark:bg-dark-bg border-t border-gray-800 dark:border-dark-border pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2 lg:col-span-1">
+                    <div class="flex items-center gap-2 mb-6">
+                        <i class="ph-fill ph-house-line text-3xl text-primary-500"></i>
+                        <span class="font-bold text-2xl tracking-tight text-white">Home<span class="text-primary-500">Scape</span></span>
+                    </div>
+                    <p class="text-gray-400 mb-6 text-sm leading-relaxed" data-i18n="footer_desc">Providing premium real estate services with a focus on client satisfaction, transparency, and top-tier properties.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="h-10 w-10 bg-gray-800 dark:bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition text-white"><i class="ph-fill ph-facebook-logo text-xl"></i></a>
+                        <a href="#" class="h-10 w-10 bg-gray-800 dark:bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition text-white"><i class="ph-fill ph-twitter-logo text-xl"></i></a>
+                        <a href="#" class="h-10 w-10 bg-gray-800 dark:bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition text-white"><i class="ph-fill ph-instagram-logo text-xl"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6" data-i18n="footer_links">Quick Links</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="index.html" class="hover:text-primary-500 transition">Home</a></li>
+                        <li><a href="listing.html" class="hover:text-primary-500 transition">Properties</a></li>
+                        <li><a href="about.html" class="hover:text-primary-500 transition">About Us</a></li>
+                        <li><a href="contact.html" class="hover:text-primary-500 transition">Contact</a></li>
+                        <li><a href="admin/login.html" class="hover:text-primary-500 transition flex items-center gap-1 text-primary-400 mt-2" data-i18n="nav_admin"><i class="ph-fill ph-lock-key"></i> Admin Demo</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6" data-i18n="footer_types">Property Types</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="hover:text-primary-500 transition">Luxury Villas</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Modern Apartments</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Commercial Spaces</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Suburban Houses</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Off-Plan Properties</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6" data-i18n="footer_contact">Contact Info</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i class="ph-fill ph-map-pin text-primary-500 text-lg mt-0.5"></i>
+                            <span>123 Premium Avenue,<br>Beverly Hills, CA 90210</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-phone text-primary-500 text-lg"></i>
+                            <span>+1 (555) 123-4567</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-envelope-simple text-primary-500 text-lg"></i>
+                            <span>hello@homescape.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 dark:border-dark-border pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2026 HomeScape Real Estate. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</body>
+</html>

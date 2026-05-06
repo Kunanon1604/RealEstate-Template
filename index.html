@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeScape - Premium Real Estate</title>
+    <meta name="description" content="Find your dream home with HomeScape. Premium real estate listings, luxury condos, and houses.">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="assets/js/tailwind-config.js"></script>
+    <script>
+      // Apply dark mode immediately to prevent flash
+      if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+          document.documentElement.classList.add('dark');
+      } else {
+          document.documentElement.classList.remove('dark');
+      }
+    </script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-dark-bg dark:text-gray-100 font-sans transition-colors duration-300">
+
+        <!-- Navbar -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/80 dark:bg-dark-bg/80 backdrop-blur-md border-b border-gray-200 dark:border-dark-border shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-4">
+                    <button id="mobile-menu-btn" class="md:hidden text-gray-600 dark:text-gray-300 hover:text-primary-600 focus:outline-none transition">
+                        <i class="ph ph-list text-3xl"></i>
+                    </button>
+                    <a href="index.html" class="flex-shrink-0 flex items-center gap-2">
+                        <i class="ph-fill ph-house-line text-3xl text-primary-600"></i>
+                        <span class="font-bold text-2xl tracking-tight text-gray-900 dark:text-white">Home<span class="text-primary-600">Scape</span></span>
+                    </a>
+                </div>
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="index.html" class="text-primary-600 dark:text-primary-400 font-medium transition">Home</a>
+                    <a href="listing.html" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 font-medium transition">Properties</a>
+                    <a href="about.html" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 font-medium transition">About</a>
+                    <a href="contact.html" class="text-gray-600 hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400 font-medium transition">Contact</a>
+                    
+                    <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2 transition-colors">
+                        <i id="theme-toggle-dark-icon" class="ph ph-moon text-xl hidden"></i>
+                        <i id="theme-toggle-light-icon" class="ph ph-sun text-xl hidden"></i>
+                    </button>
+                    
+                    <!-- Localization Settings -->
+                    <div class="flex items-center gap-2 border-l border-gray-200 dark:border-gray-700 pl-4">
+                        <select id="lang-select" class="hidden bg-transparent text-sm text-gray-600 dark:text-gray-300 font-bold focus:outline-none cursor-pointer">
+                            <option value="en" class="text-gray-900">EN</option>
+                            <option value="th" class="text-gray-900">TH</option>
+                        </select>
+                        <select id="curr-select" class="bg-transparent text-sm text-gray-600 dark:text-gray-300 font-bold focus:outline-none cursor-pointer">
+                            <option value="thb" class="text-gray-900">THB</option>
+                            <option value="usd" class="text-gray-900">USD</option>
+                        </select>
+                    </div>
+                    
+                    <a href="contact.html" class="bg-primary-600 hover:bg-primary-700 text-white px-5 py-2.5 rounded-full font-medium transition shadow-lg shadow-primary-500/30">Add Listing</a>
+                </div>
+                <!-- Mobile toggles -->
+                <div class="md:hidden flex items-center gap-4">
+                    <button id="theme-toggle-mobile" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2 transition-colors">
+                        <i class="ph ph-moon text-xl block dark:hidden"></i>
+                        <i class="ph ph-sun text-xl hidden dark:block"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+        
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-overlay" class="fixed inset-0 bg-gray-900/50 dark:bg-gray-900/80 z-[60] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm"></div>
+
+    <!-- Mobile Drawer -->
+    <div id="mobile-menu" class="fixed top-0 left-0 w-72 h-full bg-white dark:bg-dark-card z-[70] transform -translate-x-full transition-transform duration-300 ease-in-out shadow-2xl flex flex-col md:hidden">
+        <div class="p-4 flex items-center justify-between border-b border-gray-100 dark:border-dark-border h-20">
+            <div class="flex items-center gap-2">
+                <i class="ph-fill ph-house-line text-2xl text-primary-600"></i>
+                <span class="font-bold text-xl tracking-tight text-gray-900 dark:text-white">Home<span class="text-primary-600">Scape</span></span>
+            </div>
+            <button id="mobile-close-btn" class="text-gray-500 hover:text-red-500 transition focus:outline-none p-2">
+                <i class="ph ph-x text-2xl"></i>
+            </button>
+        </div>
+        <div class="px-4 py-6 space-y-2 overflow-y-auto flex-grow">
+            <a href="index.html" class="block px-3 py-3 text-base font-medium text-primary-600 bg-primary-50 dark:bg-primary-900/20 rounded-md transition">Home</a>
+            <a href="listing.html" class="block px-3 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition">Properties</a>
+            <a href="about.html" class="block px-3 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition">About Us</a>
+            <a href="contact.html" class="block px-3 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-primary-600 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md transition">Contact</a>
+        </div>
+        <div class="p-4 border-t border-gray-100 dark:border-dark-border">
+            <a href="contact.html" class="block text-center bg-primary-600 hover:bg-primary-700 text-white px-5 py-3 rounded-md font-medium transition w-full shadow-lg shadow-primary-500/30">Add Listing</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32">
+        <div class="absolute inset-0 z-0">
+            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=2000&q=80" alt="Luxury Home" class="w-full h-full object-cover object-center filter brightness-[0.6] dark:brightness-[0.4]" />
+            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-transparent to-transparent"></div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center max-w-3xl mx-auto animate-fade-in">
+                <span class="px-4 py-1.5 rounded-full bg-white/20 text-white text-sm font-medium backdrop-blur-md border border-white/30 inline-block mb-6" data-aos="fade-up" data-i18n="hero_badge">✨ Discover your dream home</span>
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6 leading-tight" data-aos="fade-up" data-aos-delay="100" data-i18n="hero_title">Find the Perfect Place to Call <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-green-300">Home</span></h1>
+                <p class="text-lg md:text-xl text-gray-200 mb-10" data-aos="fade-up" data-aos-delay="200" data-i18n="hero_subtitle">Explore premium properties, luxury condos, and exclusive estates tailored to your lifestyle.</p>
+                
+                <!-- Search Box -->
+                <div class="bg-white dark:bg-dark-card rounded-2xl p-4 shadow-premium max-w-4xl mx-auto backdrop-blur-lg border border-white/50 dark:border-gray-700" data-aos="fade-up" data-aos-delay="300">
+                    <form class="grid grid-cols-1 md:grid-cols-4 gap-4" action="listing.html">
+                        <div class="relative">
+                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1 text-left">Location</label>
+                            <div class="flex items-center bg-gray-50 dark:bg-dark-bg rounded-lg p-2 border border-gray-200 dark:border-dark-border focus-within:border-primary-500 dark:focus-within:border-primary-500 transition">
+                                <i class="ph ph-map-pin text-gray-400 text-xl mr-2"></i>
+                                <input type="text" placeholder="City, Neighborhood..." class="w-full bg-transparent border-none focus:ring-0 text-gray-900 dark:text-white placeholder-gray-400 text-sm outline-none">
+                            </div>
+                        </div>
+                        <div class="relative custom-dropdown">
+                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1 text-left">Property Type</label>
+                            <div class="flex items-center bg-gray-50 dark:bg-dark-bg rounded-lg p-2 border border-gray-200 dark:border-dark-border cursor-pointer hover:border-primary-500 dark:hover:border-primary-500 transition custom-dropdown-trigger">
+                                <i class="ph ph-buildings text-gray-400 text-xl mr-2"></i>
+                                <div class="w-full text-sm text-gray-900 dark:text-white custom-dropdown-label select-none">All Types</div>
+                                <i class="ph ph-caret-down text-gray-400 transition-transform duration-200"></i>
+                            </div>
+                            
+                            <!-- Custom Dropdown List -->
+                            <div class="absolute z-50 top-[calc(100%+0.5rem)] left-0 w-full min-w-[200px] bg-white dark:bg-dark-card border border-gray-100 dark:border-gray-800 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 custom-dropdown-menu overflow-hidden origin-top">
+                                <ul class="p-2 space-y-1 text-sm text-gray-600 dark:text-gray-300">
+                                    <li class="px-3 py-2.5 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer transition-colors duration-200 select-none flex items-center justify-between group" data-value="">
+                                        <span class="font-medium text-gray-900 dark:text-white">All Types</span>
+                                    </li>
+                                    <li class="px-3 py-2.5 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer transition-colors duration-200 select-none flex items-center justify-between group" data-value="house">
+                                        <span>House</span>
+                                    </li>
+                                    <li class="px-3 py-2.5 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer transition-colors duration-200 select-none flex items-center justify-between group" data-value="condo">
+                                        <span>Condo / Apartment</span>
+                                    </li>
+                                    <li class="px-3 py-2.5 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer transition-colors duration-200 select-none flex items-center justify-between group" data-value="villa">
+                                        <span>Villa</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <input type="hidden" name="property_type" value="">
+                        </div>
+                        
+                        <div class="relative custom-dropdown">
+                            <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1 text-left">Price Range</label>
+                            <div class="flex items-center bg-gray-50 dark:bg-dark-bg rounded-lg p-2 border border-gray-200 dark:border-dark-border cursor-pointer hover:border-primary-500 dark:hover:border-primary-500 transition custom-dropdown-trigger">
+                                <i class="ph ph-currency-dollar text-gray-400 text-xl mr-2"></i>
+                                <div class="w-full text-sm text-gray-900 dark:text-white custom-dropdown-label select-none">Any Price</div>
+                                <i class="ph ph-caret-down text-gray-400 transition-transform duration-200"></i>
+                            </div>
+
+                            <!-- Custom Dropdown List -->
+                            <div class="absolute z-50 top-[calc(100%+0.5rem)] left-0 w-full min-w-[200px] bg-white dark:bg-dark-card border border-gray-100 dark:border-gray-800 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] dark:shadow-[0_10px_40px_-10px_rgba(0,0,0,0.5)] opacity-0 pointer-events-none transform -translate-y-2 transition-all duration-300 custom-dropdown-menu overflow-hidden origin-top">
+                                <ul class="p-2 space-y-1 text-sm text-gray-600 dark:text-gray-300">
+                                    <li class="px-3 py-2.5 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer transition-colors duration-200 select-none flex items-center justify-between group" data-value="">
+                                        <span class="font-medium text-gray-900 dark:text-white">Any Price</span>
+                                    </li>
+                                    <li class="px-3 py-2.5 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer transition-colors duration-200 select-none flex items-center justify-between group" data-value="0-500">
+                                        <span>$0 - $500k</span>
+                                    </li>
+                                    <li class="px-3 py-2.5 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer transition-colors duration-200 select-none flex items-center justify-between group" data-value="500-1000">
+                                        <span>$500k - $1M</span>
+                                    </li>
+                                    <li class="px-3 py-2.5 rounded-lg hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-600 dark:hover:text-primary-400 cursor-pointer transition-colors duration-200 select-none flex items-center justify-between group" data-value="1000+">
+                                        <span>$1M+</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <input type="hidden" name="price_range" value="">
+                        </div>
+                        <div class="flex items-end">
+                            <button type="submit" class="w-full bg-primary-600 hover:bg-primary-700 text-white font-medium rounded-lg px-4 py-3.5 transition flex items-center justify-center gap-2 shadow-lg shadow-primary-500/30">
+                                <i class="ph ph-magnifying-glass text-lg"></i>
+                                Search
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="py-20 bg-white dark:bg-dark-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12" data-aos="fade-up">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Explore Property Types</h2>
+                    <p class="text-gray-600 dark:text-gray-400">Find properties that perfectly match your lifestyle.</p>
+                </div>
+                <a href="listing.html" class="hidden md:inline-flex items-center text-primary-600 font-medium hover:text-primary-700 transition gap-1 group">
+                    See All Types <i class="ph ph-arrow-right transition-transform group-hover:translate-x-1"></i>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6" data-aos="fade-up">
+                <!-- Category 1 -->
+                <a href="listing.html" class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-premium transition duration-300">
+                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Houses" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6 w-full">
+                        <h3 class="text-xl font-bold text-white mb-1">Houses</h3>
+                        <p class="text-gray-300 text-sm">240+ Properties</p>
+                    </div>
+                </a>
+                <!-- Category 2 -->
+                <a href="listing.html" class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-premium transition duration-300">
+                    <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Apartments" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6 w-full">
+                        <h3 class="text-xl font-bold text-white mb-1">Apartments</h3>
+                        <p class="text-gray-300 text-sm">185+ Properties</p>
+                    </div>
+                </a>
+                <!-- Category 3 -->
+                <a href="listing.html" class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-premium transition duration-300">
+                    <img src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Villas" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6 w-full">
+                        <h3 class="text-xl font-bold text-white mb-1">Luxury Villas</h3>
+                        <p class="text-gray-300 text-sm">45+ Properties</p>
+                    </div>
+                </a>
+                <!-- Category 4 -->
+                <a href="listing.html" class="group relative rounded-2xl overflow-hidden shadow-sm hover:shadow-premium transition duration-300">
+                    <img src="https://images.unsplash.com/photo-1554469384-e58fac16e23a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Offices" class="w-full h-64 object-cover group-hover:scale-105 transition duration-500">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/80 via-gray-900/20 to-transparent"></div>
+                    <div class="absolute bottom-0 left-0 p-6 w-full">
+                        <h3 class="text-xl font-bold text-white mb-1">Commercial</h3>
+                        <p class="text-gray-300 text-sm">30+ Properties</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Properties Section -->
+    <section class="py-12 md:py-20 bg-gray-50 dark:bg-[#0a1120]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 -mt-12 md:-mt-16">
+            <div class="text-center">
+                <span class="text-primary-600 font-bold tracking-wider uppercase text-sm mb-2 block" data-i18n="feat_badge">Best Choice</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4" data-i18n="feat_title">Featured Properties</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-12" data-i18n="feat_subtitle">Handpicked properties with premium amenities, exceptional locations, and beautiful architecture.</p>
+            </div>
+
+            <!-- Skeleton Loading Grid (Visible by default) -->
+            <div id="properties-skeleton" class="flex overflow-x-auto pb-8 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 md:overflow-visible md:pb-0 md:mx-0 md:px-0 md:snap-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                <!-- Skeleton Card 1 -->
+                <div class="min-w-[85vw] sm:min-w-[350px] md:min-w-0 shrink-0 snap-center bg-white dark:bg-dark-card rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 animate-pulse">
+                    <div class="h-56 bg-gray-200 dark:bg-gray-800 w-full"></div>
+                    <div class="p-5">
+                        <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/3 mb-4"></div>
+                        <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-6"></div>
+                        <div class="flex items-center gap-4 py-4 border-t border-gray-100 dark:border-gray-800 mt-5 pt-5">
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                            <div class="h-8 w-20 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Skeleton Card 2 -->
+                <div class="min-w-[85vw] sm:min-w-[350px] md:min-w-0 shrink-0 snap-center bg-white dark:bg-dark-card rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 animate-pulse hidden md:block">
+                    <div class="h-56 bg-gray-200 dark:bg-gray-800 w-full"></div>
+                    <div class="p-5">
+                        <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/3 mb-4"></div>
+                        <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-6"></div>
+                        <div class="flex items-center gap-4 py-4 border-t border-gray-100 dark:border-gray-800 mt-5 pt-5">
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                            <div class="h-8 w-20 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Skeleton Card 3 -->
+                <div class="min-w-[85vw] sm:min-w-[350px] md:min-w-0 shrink-0 snap-center bg-white dark:bg-dark-card rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 animate-pulse hidden lg:block">
+                    <div class="h-56 bg-gray-200 dark:bg-gray-800 w-full"></div>
+                    <div class="p-5">
+                        <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/3 mb-4"></div>
+                        <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-6"></div>
+                        <div class="flex items-center gap-4 py-4 border-t border-gray-100 dark:border-gray-800 mt-5 pt-5">
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                            <div class="h-8 w-20 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Skeleton Card 4 -->
+                <div class="min-w-[85vw] sm:min-w-[350px] md:min-w-0 shrink-0 snap-center bg-white dark:bg-dark-card rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 animate-pulse hidden lg:block">
+                    <div class="h-56 bg-gray-200 dark:bg-gray-800 w-full"></div>
+                    <div class="p-5">
+                        <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/3 mb-4"></div>
+                        <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-6"></div>
+                        <div class="flex items-center gap-4 py-4 border-t border-gray-100 dark:border-gray-800 mt-5 pt-5">
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                            <div class="h-8 w-20 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Skeleton Card 5 -->
+                <div class="min-w-[85vw] sm:min-w-[350px] md:min-w-0 shrink-0 snap-center bg-white dark:bg-dark-card rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 animate-pulse hidden lg:block">
+                    <div class="h-56 bg-gray-200 dark:bg-gray-800 w-full"></div>
+                    <div class="p-5">
+                        <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/3 mb-4"></div>
+                        <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-6"></div>
+                        <div class="flex items-center gap-4 py-4 border-t border-gray-100 dark:border-gray-800 mt-5 pt-5">
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                            <div class="h-8 w-20 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Skeleton Card 6 -->
+                <div class="min-w-[85vw] sm:min-w-[350px] md:min-w-0 shrink-0 snap-center bg-white dark:bg-dark-card rounded-3xl overflow-hidden shadow-sm border border-gray-100 dark:border-gray-800 animate-pulse hidden lg:block">
+                    <div class="h-56 bg-gray-200 dark:bg-gray-800 w-full"></div>
+                    <div class="p-5">
+                        <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/3 mb-4"></div>
+                        <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded w-3/4 mb-6"></div>
+                        <div class="flex items-center gap-4 py-4 border-t border-gray-100 dark:border-gray-800 mt-5 pt-5">
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                            <div class="h-8 w-12 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                            <div class="h-8 w-20 bg-gray-200 dark:bg-gray-800 rounded"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actual Content Grid (Hidden initially) -->
+            <div id="properties-content" class="flex overflow-x-auto pb-8 -mx-4 px-4 snap-x snap-mandatory md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 md:overflow-visible md:pb-0 md:mx-0 md:px-0 md:snap-none [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden hidden" style="display: none;" data-aos="fade-up">
+                <!-- Property Card 1 -->
+                <div class="min-w-[85vw] sm:min-w-[350px] md:min-w-0 shrink-0 snap-center bg-white dark:bg-dark-card rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 border border-gray-100 dark:border-gray-800 group relative">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent z-10 opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Luxury Villa" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out">
+                        
+                        <div class="absolute top-4 left-4 z-20 bg-primary-600/90 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg backdrop-blur-md border border-white/20">Featured</div>
+                        
+                        <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+                            <div class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md rounded-full p-2.5 text-gray-500 hover:text-red-500 hover:bg-white dark:hover:bg-dark-bg transition-all shadow-lg cursor-pointer" title="Save to Favorites">
+                                <i class="ph-fill ph-heart text-xl"></i>
+                            </div>
+                            <div class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md rounded-full p-2.5 text-gray-500 hover:text-primary-500 hover:bg-white dark:hover:bg-dark-bg transition-all shadow-lg cursor-pointer btn-compare" data-id="prop-1" data-title="Modern Luxury Villa with Pool" data-price="$2,450,000" data-img="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-beds="4" data-baths="3" data-sqft="3,200" title="Compare">
+                                <i class="ph-bold ph-arrows-left-right text-xl"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <div class="bg-white/95 dark:bg-dark-card/95 backdrop-blur-md font-extrabold px-4 py-2 rounded-xl text-gray-900 dark:text-white shadow-xl format-price" data-usd-value="2450000">
+                                $2,450,000
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-1.5 text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2.5">
+                            <i class="ph-fill ph-map-pin text-sm"></i>
+                            <span>Beverly Hills, California</span>
+                        </div>
+                        <a href="detail.html" class="block text-xl font-bold text-gray-900 dark:text-white mb-2 hover:text-primary-600 dark:hover:text-primary-400 transition-colors line-clamp-1" title="Modern Luxury Villa with Pool">Modern Luxury Villa with Pool</a>
+                        
+                        <div class="flex items-center gap-4 text-gray-700 dark:text-gray-300 text-sm mt-5 pt-5 border-t border-gray-100 dark:border-gray-800/60">
+                            <div class="flex items-center gap-2 font-medium" title="4 Bedrooms">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bed text-lg"></i></div>
+                                <span>4</span>
+                            </div>
+                            <div class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="flex items-center gap-2 font-medium" title="3 Bathrooms">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bathtub text-lg"></i></div>
+                                <span>3</span>
+                            </div>
+                            <div class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="flex items-center gap-2 font-medium" title="3,200 Square Feet">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bounding-box text-lg"></i></div>
+                                <span>3,200 <span class="text-xs text-gray-400 dark:text-gray-500 font-normal">sqft</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property Card 2 -->
+                <div class="min-w-[85vw] sm:min-w-[350px] md:min-w-0 shrink-0 snap-center bg-white dark:bg-dark-card rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 border border-gray-100 dark:border-gray-800 group relative">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent z-10 opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Penthouse" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out">
+                        
+                        <div class="absolute top-4 left-4 z-20 bg-blue-600/90 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg backdrop-blur-md border border-white/20">New</div>
+                        
+                        <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+                            <div class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md rounded-full p-2.5 text-gray-500 hover:text-red-500 hover:bg-white dark:hover:bg-dark-bg transition-all shadow-lg cursor-pointer" title="Save to Favorites">
+                                <i class="ph-fill ph-heart text-xl"></i>
+                            </div>
+                            <div class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md rounded-full p-2.5 text-gray-500 hover:text-primary-500 hover:bg-white dark:hover:bg-dark-bg transition-all shadow-lg cursor-pointer btn-compare" data-id="prop-2" data-title="Skyview Penthouse Apartment" data-price="$1,250 / month" data-img="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-beds="2" data-baths="2" data-sqft="1,100" title="Compare">
+                                <i class="ph-bold ph-arrows-left-right text-xl"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <div class="bg-white/95 dark:bg-dark-card/95 backdrop-blur-md font-extrabold px-4 py-2 rounded-xl text-gray-900 dark:text-white shadow-xl format-price-month" data-usd-value="1250">
+                                $1,250 / month
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-1.5 text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2.5">
+                            <i class="ph-fill ph-map-pin text-sm"></i>
+                            <span>Sukhumvit, Bangkok</span>
+                        </div>
+                        <a href="detail.html" class="block text-xl font-bold text-gray-900 dark:text-white mb-2 hover:text-primary-600 dark:hover:text-primary-400 transition-colors line-clamp-1" title="Skyview Penthouse Apartment">Skyview Penthouse Apartment</a>
+                        
+                        <div class="flex items-center gap-4 text-gray-700 dark:text-gray-300 text-sm mt-5 pt-5 border-t border-gray-100 dark:border-gray-800/60">
+                            <div class="flex items-center gap-2 font-medium" title="2 Bedrooms">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bed text-lg"></i></div>
+                                <span>2</span>
+                            </div>
+                            <div class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="flex items-center gap-2 font-medium" title="2 Bathrooms">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bathtub text-lg"></i></div>
+                                <span>2</span>
+                            </div>
+                            <div class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="flex items-center gap-2 font-medium" title="1,100 Square Feet">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bounding-box text-lg"></i></div>
+                                <span>1,100 <span class="text-xs text-gray-400 dark:text-gray-500 font-normal">sqft</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property Card 3 -->
+                <div class="min-w-[85vw] sm:min-w-[350px] md:min-w-0 shrink-0 snap-center bg-white dark:bg-dark-card rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 border border-gray-100 dark:border-gray-800 group relative">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent z-10 opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Suburban Home" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out">
+                        
+                        <div class="absolute top-4 left-4 z-20 bg-green-600/90 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg backdrop-blur-md border border-white/20">For Sale</div>
+                        
+                        <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+                            <div class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md rounded-full p-2.5 text-gray-500 hover:text-red-500 hover:bg-white dark:hover:bg-dark-bg transition-all shadow-lg cursor-pointer" title="Save to Favorites">
+                                <i class="ph-fill ph-heart text-xl"></i>
+                            </div>
+                            <div class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md rounded-full p-2.5 text-gray-500 hover:text-primary-500 hover:bg-white dark:hover:bg-dark-bg transition-all shadow-lg cursor-pointer btn-compare" data-id="prop-3" data-title="Beautiful Family Home with Garden" data-price="$850,000" data-img="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-beds="5" data-baths="4" data-sqft="4,500" title="Compare">
+                                <i class="ph-bold ph-arrows-left-right text-xl"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <div class="bg-white/95 dark:bg-dark-card/95 backdrop-blur-md font-extrabold px-4 py-2 rounded-xl text-gray-900 dark:text-white shadow-xl format-price" data-usd-value="850000">
+                                $850,000
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-1.5 text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2.5">
+                            <i class="ph-fill ph-map-pin text-sm"></i>
+                            <span>Austin, Texas</span>
+                        </div>
+                        <a href="detail.html" class="block text-xl font-bold text-gray-900 dark:text-white mb-2 hover:text-primary-600 dark:hover:text-primary-400 transition-colors line-clamp-1" title="Beautiful Family Home with Garden">Beautiful Family Home with Garden</a>
+                        
+                        <div class="flex items-center gap-4 text-gray-700 dark:text-gray-300 text-sm mt-5 pt-5 border-t border-gray-100 dark:border-gray-800/60">
+                            <div class="flex items-center gap-2 font-medium" title="5 Bedrooms">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bed text-lg"></i></div>
+                                <span>5</span>
+                            </div>
+                            <div class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="flex items-center gap-2 font-medium" title="4 Bathrooms">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bathtub text-lg"></i></div>
+                                <span>4</span>
+                            </div>
+                            <div class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="flex items-center gap-2 font-medium" title="4,500 Square Feet">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bounding-box text-lg"></i></div>
+                                <span>4,500 <span class="text-xs text-gray-400 dark:text-gray-500 font-normal">sqft</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property Card 4 -->
+                <div class="min-w-[85vw] sm:min-w-[350px] md:min-w-0 shrink-0 snap-center bg-white dark:bg-dark-card rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 border border-gray-100 dark:border-gray-800 group relative">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent z-10 opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <img src="https://images.unsplash.com/photo-1600607686527-6fb886090705?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Oceanfront Contemporary Mansion" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out">
+                        
+                        <div class="absolute top-4 left-4 z-20 bg-red-600/90 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg backdrop-blur-md border border-white/20">Hot Deal</div>
+                        
+                        <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+                            <div class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md rounded-full p-2.5 text-gray-500 hover:text-red-500 hover:bg-white dark:hover:bg-dark-bg transition-all shadow-lg cursor-pointer" title="Save to Favorites">
+                                <i class="ph-fill ph-heart text-xl"></i>
+                            </div>
+                            <div class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md rounded-full p-2.5 text-gray-500 hover:text-primary-500 hover:bg-white dark:hover:bg-dark-bg transition-all shadow-lg cursor-pointer btn-compare" data-id="prop-4" data-title="Oceanfront Contemporary Mansion" data-price="$3,200,000" data-img="https://images.unsplash.com/photo-1600607686527-6fb886090705?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-beds="6" data-baths="7" data-sqft="6,500" title="Compare">
+                                <i class="ph-bold ph-arrows-left-right text-xl"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <div class="bg-white/95 dark:bg-dark-card/95 backdrop-blur-md font-extrabold px-4 py-2 rounded-xl text-gray-900 dark:text-white shadow-xl format-price" data-usd-value="3200000">
+                                $3,200,000
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-1.5 text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2.5">
+                            <i class="ph-fill ph-map-pin text-sm"></i>
+                            <span>Miami, Florida</span>
+                        </div>
+                        <a href="detail.html" class="block text-xl font-bold text-gray-900 dark:text-white mb-2 hover:text-primary-600 dark:hover:text-primary-400 transition-colors line-clamp-1" title="Oceanfront Contemporary Mansion">Oceanfront Contemporary Mansion</a>
+                        
+                        <div class="flex items-center gap-4 text-gray-700 dark:text-gray-300 text-sm mt-5 pt-5 border-t border-gray-100 dark:border-gray-800/60">
+                            <div class="flex items-center gap-2 font-medium" title="6 Bedrooms">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bed text-lg"></i></div>
+                                <span>6</span>
+                            </div>
+                            <div class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="flex items-center gap-2 font-medium" title="7 Bathrooms">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bathtub text-lg"></i></div>
+                                <span>7</span>
+                            </div>
+                            <div class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="flex items-center gap-2 font-medium" title="6,500 Square Feet">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bounding-box text-lg"></i></div>
+                                <span>6,500 <span class="text-xs text-gray-400 dark:text-gray-500 font-normal">sqft</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property Card 5 -->
+                <div class="min-w-[85vw] sm:min-w-[350px] md:min-w-0 shrink-0 snap-center bg-white dark:bg-dark-card rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 border border-gray-100 dark:border-gray-800 group relative">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent z-10 opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <img src="https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="High-Rise Luxury Condo" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out">
+                        
+                        <div class="absolute top-4 left-4 z-20 bg-purple-600/90 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg backdrop-blur-md border border-white/20">Luxury</div>
+                        
+                        <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+                            <div class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md rounded-full p-2.5 text-gray-500 hover:text-red-500 hover:bg-white dark:hover:bg-dark-bg transition-all shadow-lg cursor-pointer" title="Save to Favorites">
+                                <i class="ph-fill ph-heart text-xl"></i>
+                            </div>
+                            <div class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md rounded-full p-2.5 text-gray-500 hover:text-primary-500 hover:bg-white dark:hover:bg-dark-bg transition-all shadow-lg cursor-pointer btn-compare" data-id="prop-5" data-title="High-Rise Luxury Condo" data-price="$1,850,000" data-img="https://images.unsplash.com/photo-1512915922686-57c11dde9b6b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-beds="3" data-baths="3" data-sqft="2,100" title="Compare">
+                                <i class="ph-bold ph-arrows-left-right text-xl"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <div class="bg-white/95 dark:bg-dark-card/95 backdrop-blur-md font-extrabold px-4 py-2 rounded-xl text-gray-900 dark:text-white shadow-xl format-price" data-usd-value="1850000">
+                                $1,850,000
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-1.5 text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2.5">
+                            <i class="ph-fill ph-map-pin text-sm"></i>
+                            <span>Manhattan, New York</span>
+                        </div>
+                        <a href="detail.html" class="block text-xl font-bold text-gray-900 dark:text-white mb-2 hover:text-primary-600 dark:hover:text-primary-400 transition-colors line-clamp-1" title="High-Rise Luxury Condo">High-Rise Luxury Condo</a>
+                        
+                        <div class="flex items-center gap-4 text-gray-700 dark:text-gray-300 text-sm mt-5 pt-5 border-t border-gray-100 dark:border-gray-800/60">
+                            <div class="flex items-center gap-2 font-medium" title="3 Bedrooms">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bed text-lg"></i></div>
+                                <span>3</span>
+                            </div>
+                            <div class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="flex items-center gap-2 font-medium" title="3 Bathrooms">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bathtub text-lg"></i></div>
+                                <span>3</span>
+                            </div>
+                            <div class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="flex items-center gap-2 font-medium" title="2,100 Square Feet">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bounding-box text-lg"></i></div>
+                                <span>2,100 <span class="text-xs text-gray-400 dark:text-gray-500 font-normal">sqft</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Property Card 6 -->
+                <div class="min-w-[85vw] sm:min-w-[350px] md:min-w-0 shrink-0 snap-center bg-white dark:bg-dark-card rounded-3xl overflow-hidden shadow-sm hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 border border-gray-100 dark:border-gray-800 group relative">
+                    <div class="relative h-56 overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-t from-gray-900/60 via-transparent to-transparent z-10 opacity-80 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        <img src="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Elegant Historic Townhouse" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out">
+                        
+                        <div class="absolute top-4 left-4 z-20 bg-orange-500/90 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg backdrop-blur-md border border-white/20">For Rent</div>
+                        
+                        <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+                            <div class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md rounded-full p-2.5 text-gray-500 hover:text-red-500 hover:bg-white dark:hover:bg-dark-bg transition-all shadow-lg cursor-pointer" title="Save to Favorites">
+                                <i class="ph-fill ph-heart text-xl"></i>
+                            </div>
+                            <div class="bg-white/90 dark:bg-dark-bg/90 backdrop-blur-md rounded-full p-2.5 text-gray-500 hover:text-primary-500 hover:bg-white dark:hover:bg-dark-bg transition-all shadow-lg cursor-pointer btn-compare" data-id="prop-6" data-title="Elegant Historic Townhouse" data-price="$4,500 / month" data-img="https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" data-beds="4" data-baths="3" data-sqft="2,800" title="Compare">
+                                <i class="ph-bold ph-arrows-left-right text-xl"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="absolute bottom-4 left-4 z-20">
+                            <div class="bg-white/95 dark:bg-dark-card/95 backdrop-blur-md font-extrabold px-4 py-2 rounded-xl text-gray-900 dark:text-white shadow-xl format-price-month" data-usd-value="4500">
+                                $4,500 / month
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <div class="flex items-center gap-1.5 text-xs font-semibold text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2.5">
+                            <i class="ph-fill ph-map-pin text-sm"></i>
+                            <span>London, UK</span>
+                        </div>
+                        <a href="detail.html" class="block text-xl font-bold text-gray-900 dark:text-white mb-2 hover:text-primary-600 dark:hover:text-primary-400 transition-colors line-clamp-1" title="Elegant Historic Townhouse">Elegant Historic Townhouse</a>
+                        
+                        <div class="flex items-center gap-4 text-gray-700 dark:text-gray-300 text-sm mt-5 pt-5 border-t border-gray-100 dark:border-gray-800/60">
+                            <div class="flex items-center gap-2 font-medium" title="4 Bedrooms">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bed text-lg"></i></div>
+                                <span>4</span>
+                            </div>
+                            <div class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="flex items-center gap-2 font-medium" title="3 Bathrooms">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bathtub text-lg"></i></div>
+                                <span>3</span>
+                            </div>
+                            <div class="w-1 h-1 rounded-full bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="flex items-center gap-2 font-medium" title="2,800 Square Feet">
+                                <div class="bg-primary-50 dark:bg-gray-800 text-primary-600 dark:text-primary-400 p-1.5 rounded-lg"><i class="ph-fill ph-bounding-box text-lg"></i></div>
+                                <span>2,800 <span class="text-xs text-gray-400 dark:text-gray-500 font-normal">sqft</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Navigation Arrows -->
+            <div class="flex justify-center gap-4 mt-6 mb-2 md:hidden">
+                <button id="btn-prev-prop" class="bg-white dark:bg-dark-card text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-800 border border-gray-100 dark:border-gray-800 w-12 h-12 rounded-full flex items-center justify-center transition shadow-sm active:scale-95" aria-label="Previous">
+                    <i class="ph-bold ph-caret-left text-xl"></i>
+                </button>
+                <button id="btn-next-prop" class="bg-white dark:bg-dark-card text-gray-600 dark:text-gray-300 hover:text-primary-600 hover:bg-primary-50 dark:hover:bg-gray-800 border border-gray-100 dark:border-gray-800 w-12 h-12 rounded-full flex items-center justify-center transition shadow-sm active:scale-95" aria-label="Next">
+                    <i class="ph-bold ph-caret-right text-xl"></i>
+                </button>
+            </div>
+
+            <div class="text-center mt-8 md:mt-12" data-aos="fade-up">
+                <a href="listing.html" class="inline-flex items-center justify-center px-8 py-3.5 text-base font-medium text-white bg-gray-900 dark:bg-gray-700 hover:bg-primary-600 dark:hover:bg-primary-600 rounded-full transition shadow-lg hover:shadow-primary-500/30">
+                    View All Properties
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="py-12 md:py-20 bg-white dark:bg-dark-bg border-t border-gray-100 dark:border-dark-border">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-16 items-center" data-aos="fade-up">
+                <div class="lg:w-1/2">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="Agent" class="rounded-2xl shadow-premium z-10 relative">
+                        <div class="absolute -bottom-6 -right-6 bg-white dark:bg-dark-card p-6 rounded-2xl shadow-xl z-20 border border-gray-100 dark:border-dark-border hidden md:block animate-slide-up">
+                            <div class="flex items-center gap-4">
+                                <div class="bg-primary-100 dark:bg-primary-900/30 p-3 rounded-full text-primary-600">
+                                    <i class="ph-fill ph-star text-2xl"></i>
+                                </div>
+                                <div>
+                                    <div class="font-bold text-gray-900 dark:text-white text-xl">4.9/5</div>
+                                    <div class="text-sm text-gray-500 dark:text-gray-400">Trusted by 5k+ clients</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 space-y-8">
+                    <div>
+                        <span class="text-primary-600 font-bold tracking-wider uppercase text-sm mb-2 block">Why Choose Us</span>
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">We Make Finding A Home Easier</h2>
+                        <p class="text-gray-600 dark:text-gray-400">With over 15 years of experience in real estate, we have the network, expertise, and passion to find your perfect property without the usual hassle.</p>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="flex gap-4">
+                            <div class="bg-primary-50 dark:bg-primary-900/20 text-primary-600 h-14 w-14 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="ph ph-shield-check text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Property Insurance</h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">We provide completely transparent deals with top-tier insurance options to secure your future.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="bg-primary-50 dark:bg-primary-900/20 text-primary-600 h-14 w-14 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="ph ph-money text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Lowest Commission</h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">We offer the most competitive rates in the market, ensuring you get more value for your money.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="bg-primary-50 dark:bg-primary-900/20 text-primary-600 h-14 w-14 rounded-2xl flex items-center justify-center flex-shrink-0">
+                                <i class="ph ph-map-trifold text-3xl"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">Prime Locations</h3>
+                                <p class="text-gray-600 dark:text-gray-400 text-sm">Our catalog features exclusively premium properties situated in the most desirable neighborhoods.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-20 bg-gray-50 dark:bg-[#0a1120]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">What Our Clients Say</h2>
+                <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">Real stories from people who found their dream properties through HomeScape.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8" data-aos="fade-up">
+                <!-- Review 1 -->
+                <div class="bg-white dark:bg-dark-card p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-dark-border relative">
+                    <i class="ph-fill ph-quotes text-5xl text-gray-100 dark:text-gray-800 absolute top-6 right-6"></i>
+                    <div class="flex gap-1 text-yellow-400 mb-4 text-sm relative z-10">
+                        <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 italic mb-6 relative z-10">"The experience was incredibly smooth. They understood exactly what we were looking for and helped us secure a beautiful condo in the city center within two weeks."</p>
+                    <div class="flex items-center gap-4 relative z-10">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User" class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">Sarah Jenkins</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Home Owner</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Review 2 -->
+                <div class="bg-white dark:bg-dark-card p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-dark-border relative">
+                    <i class="ph-fill ph-quotes text-5xl text-gray-100 dark:text-gray-800 absolute top-6 right-6"></i>
+                    <div class="flex gap-1 text-yellow-400 mb-4 text-sm relative z-10">
+                        <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 italic mb-6 relative z-10">"Professionalism at its finest. From the initial viewing to closing the deal, the HomeScape team was transparent, helpful, and highly efficient."</p>
+                    <div class="flex items-center gap-4 relative z-10">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User" class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">Michael Roberts</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Property Investor</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Review 3 -->
+                <div class="bg-white dark:bg-dark-card p-8 rounded-2xl shadow-sm border border-gray-100 dark:border-dark-border relative">
+                    <i class="ph-fill ph-quotes text-5xl text-gray-100 dark:text-gray-800 absolute top-6 right-6"></i>
+                    <div class="flex gap-1 text-yellow-400 mb-4 text-sm relative z-10">
+                        <i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star"></i><i class="ph-fill ph-star-half"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 italic mb-6 relative z-10">"We relocated from another country and HomeScape made finding a rental stress-free. Highly recommend their services for expats."</p>
+                    <div class="flex items-center gap-4 relative z-10">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="User" class="w-12 h-12 rounded-full object-cover">
+                        <div>
+                            <h4 class="font-bold text-gray-900 dark:text-white">Elena Rodriguez</h4>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Tenant</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-20 relative overflow-hidden bg-primary-600 dark:bg-primary-900">
+        <div class="absolute inset-0 z-0 opacity-10 dark:opacity-20">
+            <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                <defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="2" cy="2" r="2" fill="white"/></pattern></defs>
+                <rect width="100%" height="100%" fill="url(#dots)" />
+            </svg>
+        </div>
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center" data-aos="fade-up">
+            <h2 class="text-3xl md:text-5xl font-bold text-white mb-6">Ready To Find Your Dream Home?</h2>
+            <p class="text-primary-100 text-lg mb-10 max-w-2xl mx-auto">Join thousands of satisfied homeowners. Browse our premium listings today or talk to one of our expert agents.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="listing.html" class="bg-white text-primary-600 hover:bg-gray-50 px-8 py-4 rounded-full font-bold transition shadow-lg text-lg">Browse Properties</a>
+                <a href="contact.html" class="bg-primary-700 dark:bg-primary-800 text-white hover:bg-primary-800 dark:hover:bg-primary-700 px-8 py-4 rounded-full font-bold transition border border-primary-500 text-lg">Contact an Agent</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 dark:bg-dark-bg border-t border-gray-800 dark:border-dark-border pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div class="col-span-1 md:col-span-2 lg:col-span-1">
+                    <div class="flex items-center gap-2 mb-6">
+                        <i class="ph-fill ph-house-line text-3xl text-primary-500"></i>
+                        <span class="font-bold text-2xl tracking-tight text-white">Home<span class="text-primary-500">Scape</span></span>
+                    </div>
+                    <p class="text-gray-400 mb-6 text-sm leading-relaxed" data-i18n="footer_desc">Providing premium real estate services with a focus on client satisfaction, transparency, and top-tier properties.</p>
+                    <div class="flex gap-4">
+                        <a href="#" class="h-10 w-10 bg-gray-800 dark:bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition text-white"><i class="ph-fill ph-facebook-logo text-xl"></i></a>
+                        <a href="#" class="h-10 w-10 bg-gray-800 dark:bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition text-white"><i class="ph-fill ph-twitter-logo text-xl"></i></a>
+                        <a href="#" class="h-10 w-10 bg-gray-800 dark:bg-gray-800 rounded-full flex items-center justify-center hover:bg-primary-600 transition text-white"><i class="ph-fill ph-instagram-logo text-xl"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6" data-i18n="footer_links">Quick Links</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="index.html" class="hover:text-primary-500 transition">Home</a></li>
+                        <li><a href="listing.html" class="hover:text-primary-500 transition">Properties</a></li>
+                        <li><a href="about.html" class="hover:text-primary-500 transition">About Us</a></li>
+                        <li><a href="contact.html" class="hover:text-primary-500 transition">Contact</a></li>
+                        <li><a href="admin/login.html" class="hover:text-primary-500 transition flex items-center gap-1 text-primary-400 mt-2" data-i18n="nav_admin"><i class="ph-fill ph-lock-key"></i> Admin Demo</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6" data-i18n="footer_types">Property Types</h4>
+                    <ul class="space-y-3 text-sm">
+                        <li><a href="#" class="hover:text-primary-500 transition">Luxury Villas</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Modern Apartments</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Commercial Spaces</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Suburban Houses</a></li>
+                        <li><a href="#" class="hover:text-primary-500 transition">Off-Plan Properties</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold text-lg mb-6" data-i18n="footer_contact">Contact Info</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3">
+                            <i class="ph-fill ph-map-pin text-primary-500 text-lg mt-0.5"></i>
+                            <span>123 Premium Avenue,<br>Beverly Hills, CA 90210</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-phone text-primary-500 text-lg"></i>
+                            <span>+1 (555) 123-4567</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i class="ph-fill ph-envelope-simple text-primary-500 text-lg"></i>
+                            <span>hello@homescape.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 dark:border-dark-border pt-8 text-center text-sm text-gray-500">
+                <p>&copy; 2026 HomeScape Real Estate. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</body>
+</html>

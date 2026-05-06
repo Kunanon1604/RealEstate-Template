@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - HomeScape</title>
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../assets/js/tailwind-config.js"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <link rel="stylesheet" href="../assets/css/admin/style.css">
+</head>
+<body class="bg-[#f8fafc] text-gray-800 font-sans antialiased flex h-screen overflow-hidden selection:bg-primary-100 selection:text-primary-900">
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900/50 z-20 hidden lg:hidden backdrop-blur-sm transition-opacity"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-100/80 z-30 transform -translate-x-full lg:relative lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+        <!-- Logo -->
+        <div class="h-16 flex items-center px-6 border-b border-gray-100/80">
+            <a href="../index.html" class="flex items-center gap-2">
+                <i class="ph-fill ph-house-line text-2xl text-primary-600"></i>
+                <span class="font-bold text-xl tracking-tight text-gray-900">Home<span class="text-primary-600">Scape</span></span>
+            </a>
+            <button id="close-sidebar" class="ml-auto lg:hidden text-gray-400 hover:text-gray-600">
+                <i class="ph ph-x text-xl"></i>
+            </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-4 px-3 space-y-1">
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-3 mt-4">Overview</div>
+            <a href="index.html" class="flex items-center gap-3 px-3 py-2.5 bg-primary-50 text-primary-700 rounded-lg font-medium transition-colors">
+                <i class="ph ph-squares-four text-xl"></i>
+                Dashboard
+            </a>
+            
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-3 mt-6">Management</div>
+            <a href="properties.html" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors">
+                <i class="ph ph-buildings text-xl"></i>
+                Properties
+            </a>
+            <a href="calendar.html" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors">
+                <i class="ph ph-calendar text-xl"></i>
+                Appointments
+            </a>
+            <a href="leads.html" class="flex items-center justify-between px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors">
+                <div class="flex items-center gap-3">
+                    <i class="ph ph-users text-xl"></i>
+                    Leads
+                </div>
+                <span class="bg-red-100 text-red-600 py-0.5 px-2 rounded-full text-xs font-bold">12</span>
+            </a>
+            
+            <div class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 px-3 mt-6">System</div>
+            <a href="settings.html" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors">
+                <i class="ph ph-gear text-xl"></i>
+                Settings
+            </a>
+            <a href="../index.html" class="flex items-center gap-3 px-3 py-2.5 text-gray-600 hover:bg-gray-50 hover:text-gray-900 rounded-lg font-medium transition-colors mt-auto">
+                <i class="ph ph-arrow-left text-xl"></i>
+                Back to Site
+            </a>
+        </nav>
+
+        <!-- User bottom -->
+        <div class="p-4 border-t border-gray-100/80">
+            <div class="flex items-center gap-3">
+                <img src="https://ui-avatars.com/api/?name=Admin+User&background=eff6ff&color=1d4ed8" alt="Admin" class="w-10 h-10 rounded-full">
+                <div>
+                    <div class="font-semibold text-sm text-gray-900">Admin User</div>
+                    <div class="text-xs text-gray-500">admin@homescape.com</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col h-screen overflow-hidden">
+        <!-- Top Navbar -->
+        <header class="h-16 bg-white border-b border-gray-100/80 flex items-center justify-between px-6 lg:px-8 z-10 shadow-[0_4px_24px_rgba(0,0,0,0.01)]">
+            <div class="flex items-center gap-4">
+                <button id="open-sidebar" class="text-gray-500 hover:text-gray-700 lg:hidden">
+                    <i class="ph ph-list text-2xl"></i>
+                </button>
+                <div class="relative hidden md:block">
+                    <i class="ph ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" placeholder="Search anywhere..." class="pl-10 pr-4 py-2 bg-gray-50 border-none rounded-lg text-sm focus:ring-2 focus:ring-primary-100 w-64 outline-none transition-all focus:bg-white">
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-4">
+                <button class="relative text-gray-500 hover:text-gray-700 transition-colors p-2 rounded-full hover:bg-gray-50">
+                    <i class="ph ph-bell text-xl"></i>
+                    <span class="absolute top-1 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                </button>
+            </div>
+        </header>
+        
+        <!-- Main Area -->
+        <main class="flex-1 overflow-x-hidden overflow-y-auto p-6 lg:p-8">
+            <div class="max-w-7xl mx-auto space-y-6">
+                
+                <!-- Header -->
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
+                    <p class="text-gray-500 text-sm mt-1">Welcome back, here's what's happening with your properties today.</p>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Stat 1 -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex items-center justify-between">
+                        <div>
+                            <div class="text-gray-500 text-sm font-medium mb-1">Total Properties</div>
+                            <div class="text-3xl font-bold text-gray-900">1,248</div>
+                            <div class="text-xs font-medium text-emerald-600 mt-2 flex items-center gap-1">
+                                <i class="ph ph-trend-up"></i> +12% this month
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 bg-primary-50 rounded-xl flex items-center justify-center text-primary-600">
+                            <i class="ph ph-buildings text-2xl"></i>
+                        </div>
+                    </div>
+                    <!-- Stat 2 -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex items-center justify-between">
+                        <div>
+                            <div class="text-gray-500 text-sm font-medium mb-1">Total Views</div>
+                            <div class="text-3xl font-bold text-gray-900">45.2k</div>
+                            <div class="text-xs font-medium text-emerald-600 mt-2 flex items-center gap-1">
+                                <i class="ph ph-trend-up"></i> +8.4% this month
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600">
+                            <i class="ph ph-eye text-2xl"></i>
+                        </div>
+                    </div>
+                    <!-- Stat 3 -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex items-center justify-between">
+                        <div>
+                            <div class="text-gray-500 text-sm font-medium mb-1">New Leads</div>
+                            <div class="text-3xl font-bold text-gray-900">324</div>
+                            <div class="text-xs font-medium text-red-500 mt-2 flex items-center gap-1">
+                                <i class="ph ph-trend-down"></i> -2.1% this month
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 bg-amber-50 rounded-xl flex items-center justify-center text-amber-600">
+                            <i class="ph ph-users text-2xl"></i>
+                        </div>
+                    </div>
+                    <!-- Stat 4 -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex items-center justify-between">
+                        <div>
+                            <div class="text-gray-500 text-sm font-medium mb-1">Properties Sold</div>
+                            <div class="text-3xl font-bold text-gray-900">68</div>
+                            <div class="text-xs font-medium text-emerald-600 mt-2 flex items-center gap-1">
+                                <i class="ph ph-trend-up"></i> +14% this month
+                            </div>
+                        </div>
+                        <div class="w-12 h-12 bg-emerald-50 rounded-xl flex items-center justify-center text-emerald-600">
+                            <i class="ph ph-house-line text-2xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 1: Main Chart + Revenue -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                        <div class="flex items-center justify-between mb-6">
+                            <div>
+                                <h3 class="font-bold text-gray-900">Traffic & Lead Overview</h3>
+                                <p class="text-xs text-gray-400 mt-0.5">Website visits vs inquiries over time</p>
+                            </div>
+                            <select id="mainChartPeriod" class="bg-gray-50 border-none text-sm text-gray-600 py-1.5 px-3 rounded-lg outline-none cursor-pointer">
+                                <option>Last 6 Months</option>
+                                <option>This Year</option>
+                            </select>
+                        </div>
+                        <div class="h-72 w-full"><canvas id="mainChart"></canvas></div>
+                    </div>
+
+                    <!-- Revenue Chart -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                        <div class="flex items-center justify-between mb-2">
+                            <h3 class="font-bold text-gray-900">Revenue</h3>
+                            <span class="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">+18.2%</span>
+                        </div>
+                        <p class="text-xs text-gray-400 mb-4">Monthly commission income</p>
+                        <div class="text-2xl font-bold text-gray-900 mb-4">$284,500 <span class="text-sm font-normal text-gray-400">this month</span></div>
+                        <div class="h-48 w-full"><canvas id="revenueChart"></canvas></div>
+                    </div>
+                </div>
+
+                <!-- Row 2: Doughnut + Lead Sources + Conversion -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Property Types Doughnut -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                        <h3 class="font-bold text-gray-900 mb-1">Property Types</h3>
+                        <p class="text-xs text-gray-400 mb-4">Distribution by category</p>
+                        <div class="h-52 w-full flex items-center justify-center"><canvas id="propertyTypeChart"></canvas></div>
+                        <div class="grid grid-cols-2 gap-2 mt-4">
+                            <div class="flex items-center gap-2 text-xs text-gray-600"><span class="w-2.5 h-2.5 rounded-full bg-[#6366f1]"></span>Residential</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-600"><span class="w-2.5 h-2.5 rounded-full bg-[#22c55e]"></span>Commercial</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-600"><span class="w-2.5 h-2.5 rounded-full bg-[#f59e0b]"></span>Land</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-600"><span class="w-2.5 h-2.5 rounded-full bg-[#ec4899]"></span>Industrial</div>
+                        </div>
+                    </div>
+
+                    <!-- Lead Sources -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                        <h3 class="font-bold text-gray-900 mb-1">Lead Sources</h3>
+                        <p class="text-xs text-gray-400 mb-4">Where your leads come from</p>
+                        <div class="h-52 w-full flex items-center justify-center"><canvas id="leadSourceChart"></canvas></div>
+                        <div class="grid grid-cols-2 gap-2 mt-4">
+                            <div class="flex items-center gap-2 text-xs text-gray-600"><span class="w-2.5 h-2.5 rounded-full bg-[#6366f1]"></span>Website</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-600"><span class="w-2.5 h-2.5 rounded-full bg-[#22c55e]"></span>Referral</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-600"><span class="w-2.5 h-2.5 rounded-full bg-[#f59e0b]"></span>Social Media</div>
+                            <div class="flex items-center gap-2 text-xs text-gray-600"><span class="w-2.5 h-2.5 rounded-full bg-[#3b82f6]"></span>Ads</div>
+                        </div>
+                    </div>
+
+                    <!-- Conversion Funnel -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                        <h3 class="font-bold text-gray-900 mb-1">Conversion Funnel</h3>
+                        <p class="text-xs text-gray-400 mb-4">Lead-to-sale pipeline</p>
+                        <div class="h-52 w-full"><canvas id="funnelChart"></canvas></div>
+                        <div class="mt-4 text-center">
+                            <span class="text-xs text-gray-500">Overall conversion rate</span>
+                            <div class="text-lg font-bold text-emerald-600">5.4%</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 3: Geographic + Top Properties + Inquiries -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- Geographic Distribution -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                        <h3 class="font-bold text-gray-900 mb-1">Top Regions</h3>
+                        <p class="text-xs text-gray-400 mb-4">Properties by location</p>
+                        <div class="h-64 w-full"><canvas id="geoChart"></canvas></div>
+                    </div>
+
+                    <!-- Top Properties Table -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="font-bold text-gray-900">Top Properties</h3>
+                                <p class="text-xs text-gray-400 mt-0.5">By views this month</p>
+                            </div>
+                            <a href="properties.html" class="text-sm text-primary-600 font-medium hover:text-primary-700">View All</a>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors">
+                                <div class="w-10 h-10 bg-gradient-to-br from-primary-100 to-primary-200 rounded-lg flex items-center justify-center text-primary-700 font-bold text-sm">1</div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-sm font-medium text-gray-900 truncate">Modern Luxury Villa</div>
+                                    <div class="text-xs text-gray-500">$2,450,000</div>
+                                </div>
+                                <div class="text-right"><div class="text-sm font-bold text-gray-900">3.2k</div><div class="text-[10px] text-emerald-600">+24%</div></div>
+                            </div>
+                            <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors">
+                                <div class="w-10 h-10 bg-gradient-to-br from-indigo-100 to-indigo-200 rounded-lg flex items-center justify-center text-indigo-700 font-bold text-sm">2</div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-sm font-medium text-gray-900 truncate">Skyview Penthouse</div>
+                                    <div class="text-xs text-gray-500">$1,850,000</div>
+                                </div>
+                                <div class="text-right"><div class="text-sm font-bold text-gray-900">2.8k</div><div class="text-[10px] text-emerald-600">+18%</div></div>
+                            </div>
+                            <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors">
+                                <div class="w-10 h-10 bg-gradient-to-br from-amber-100 to-amber-200 rounded-lg flex items-center justify-center text-amber-700 font-bold text-sm">3</div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-sm font-medium text-gray-900 truncate">Lakefront Estate</div>
+                                    <div class="text-xs text-gray-500">$3,100,000</div>
+                                </div>
+                                <div class="text-right"><div class="text-sm font-bold text-gray-900">2.1k</div><div class="text-[10px] text-red-500">-3%</div></div>
+                            </div>
+                            <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors">
+                                <div class="w-10 h-10 bg-gradient-to-br from-emerald-100 to-emerald-200 rounded-lg flex items-center justify-center text-emerald-700 font-bold text-sm">4</div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-sm font-medium text-gray-900 truncate">Urban Studio Loft</div>
+                                    <div class="text-xs text-gray-500">$520,000</div>
+                                </div>
+                                <div class="text-right"><div class="text-sm font-bold text-gray-900">1.9k</div><div class="text-[10px] text-emerald-600">+9%</div></div>
+                            </div>
+                            <div class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-gray-50 transition-colors">
+                                <div class="w-10 h-10 bg-gradient-to-br from-rose-100 to-rose-200 rounded-lg flex items-center justify-center text-rose-700 font-bold text-sm">5</div>
+                                <div class="flex-1 min-w-0">
+                                    <div class="text-sm font-medium text-gray-900 truncate">Suburban Family Home</div>
+                                    <div class="text-xs text-gray-500">$680,000</div>
+                                </div>
+                                <div class="text-right"><div class="text-sm font-bold text-gray-900">1.5k</div><div class="text-[10px] text-emerald-600">+12%</div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Inquiries -->
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="font-bold text-gray-900">Recent Inquiries</h3>
+                            <a href="leads.html" class="text-sm text-primary-600 font-medium hover:text-primary-700">View All</a>
+                        </div>
+                        <div class="space-y-5">
+                            <div class="flex gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Sarah+J&background=random" class="w-10 h-10 rounded-full" alt="User">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">Sarah Jenkins</div>
+                                    <div class="text-xs text-gray-500">Inquired about <span class="font-medium text-gray-700">Modern Luxury Villa</span></div>
+                                    <div class="text-[10px] text-gray-400 mt-1">2 hours ago</div>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Michael+R&background=random" class="w-10 h-10 rounded-full" alt="User">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">Michael Roberts</div>
+                                    <div class="text-xs text-gray-500">Requested a viewing for <span class="font-medium text-gray-700">Skyview Penthouse</span></div>
+                                    <div class="text-[10px] text-gray-400 mt-1">5 hours ago</div>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <img src="https://ui-avatars.com/api/?name=Elena+R&background=random" class="w-10 h-10 rounded-full" alt="User">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">Elena Rodriguez</div>
+                                    <div class="text-xs text-gray-500">Sent a message via Contact Form</div>
+                                    <div class="text-[10px] text-gray-400 mt-1">Yesterday</div>
+                                </div>
+                            </div>
+                            <div class="flex gap-3">
+                                <img src="https://ui-avatars.com/api/?name=David+W&background=random" class="w-10 h-10 rounded-full" alt="User">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">David Wilson</div>
+                                    <div class="text-xs text-gray-500">Inquired about <span class="font-medium text-gray-700">Suburban Home</span></div>
+                                    <div class="text-[10px] text-gray-400 mt-1">Yesterday</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 4: Weekly Performance + Satisfaction -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                        <div class="flex items-center justify-between mb-2">
+                            <div>
+                                <h3 class="font-bold text-gray-900">Weekly Performance</h3>
+                                <p class="text-xs text-gray-400 mt-0.5">Views, inquiries & closings by day</p>
+                            </div>
+                        </div>
+                        <div class="h-72 w-full"><canvas id="weeklyChart"></canvas></div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-gray-100/80 shadow-[0_4px_20px_rgba(0,0,0,0.03)]">
+                        <div class="flex items-center justify-between mb-2">
+                            <div>
+                                <h3 class="font-bold text-gray-900">Agent Performance</h3>
+                                <p class="text-xs text-gray-400 mt-0.5">Top agents by closed deals</p>
+                            </div>
+                        </div>
+                        <div class="h-72 w-full"><canvas id="agentChart"></canvas></div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="../assets/js/admin/main.js"></script>
+</body>
+</html>
